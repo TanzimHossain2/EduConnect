@@ -3,6 +3,7 @@ import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
+import { dbConnect } from "@/backend/db/connectDb";
 
 const inter = Inter({ subsets: ["latin"] });
 const poppins = Inter({ subsets: ["latin"], variable: "--font-poppins" });
@@ -12,11 +13,13 @@ export const metadata: Metadata = {
   description: "Explore || Learn || Build || Share",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  await dbConnect();
+  
   return (
     <html lang="en">
       <body className={cn(inter.className, poppins.className)}>
