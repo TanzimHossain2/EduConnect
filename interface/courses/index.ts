@@ -8,7 +8,7 @@ export interface ICourse {
   thumbnail: string;
   modules: ObjectId[];
   active: boolean;
-  category: ObjectId;
+  category: ICategory;
   instructor: ObjectId;
   quizzes: ObjectId;
   testimonials: ObjectId[];

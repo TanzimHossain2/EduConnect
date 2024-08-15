@@ -18,7 +18,7 @@ const testimonialSchema = new Schema<ITestimonial>({
         required: true,
         type: Number,
     },
-});
+}, { timestamps: true });
 
 const TestimonialModel: mongoose.Model<ITestimonial> =
     mongoose.models.Testimonial || mongoose.model("Testimonial", testimonialSchema);

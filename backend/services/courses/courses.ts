@@ -1,12 +1,15 @@
 import { dbConnect } from "@/backend/db/connectDb";
 import { db } from "@/backend/model";
 import { ICourse } from "@/interface/courses";
+import { replaceMongoIdInArray } from "@/lib/convertData";
 
-export const getCourses = async () : Promise<ICourse[]> =>{
+export const getCourseList = async () : Promise<ICourse[]> =>{
   try {
     await dbConnect();
 
-    const courses = await db.course.find({}).populate({
+    const courses = await db.course.find({})
+    .select(["title","subtitle","thumbnail","price","category","instructor","testimonials","modules"])
+    .populate({
         path: "category",
         model: db.category,
         select: "-__v",
@@ -25,10 +28,10 @@ export const getCourses = async () : Promise<ICourse[]> =>{
         path: "modules",
         model: db.module,
         select: "-__v",
-    })
+    }).lean();
 
 
-    return courses; 
+    return replaceMongoIdInArray(courses); 
 
   } catch (err) {
     console.error("Error fetching courses: ", err);

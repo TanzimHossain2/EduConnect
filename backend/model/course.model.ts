@@ -12,13 +12,11 @@ const courseSchema = new Schema<ICourse>({
   instructor: { type: Schema.Types.ObjectId, ref: "User" },
   quizzes: { type: Schema.Types.ObjectId, ref: "Quiz" },
   testimonials: [{ type: Schema.Types.ObjectId, ref: "Testimonial" }],
-});
+},{ timestamps: true });
 
 // indexing the course schema
 courseSchema.index({ title: "text", description: "text" });
 courseSchema.index({ category: 1, instructor: 1 });
-
-
 
 const CourseModel: mongoose.Model<ICourse> =
   mongoose.models.Course || mongoose.model("Course", courseSchema);

@@ -5,3 +5,8 @@ diagrams folder contains the diagram of the project in the form of a .drawio fil
 
 ![image](diagrams/img/EduConnect.webp)
 
+## Feature
+
+- [] Show all course
+- [] Show all categories
+

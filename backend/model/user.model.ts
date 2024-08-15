@@ -26,7 +26,7 @@ const userSchema = new Schema<IUser>({
   bio: { type: String, required: false },
   socialMedia: { type: Object, required: false },
   profilePicture: { type: String, required: false },
-});
+},{timestamps: true});
 
 const UserModel: mongoose.Model<IUser> =
   mongoose.models.User || mongoose.model("User", userSchema);
