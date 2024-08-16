@@ -27,7 +27,11 @@ const moduleSchema = new Schema<IModule>({
     required: true,
     type: [String],
   },
-});
+  duration: {
+    required: true,
+    type: Number,
+  },
+},{timestamps: true});
 
 const ModuleModel: mongoose.Model<IModule> =
   mongoose.models.Module || mongoose.model("Module", moduleSchema);
