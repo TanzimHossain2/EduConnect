@@ -23,6 +23,7 @@ const CoursesPage = async () => {
       </div>
 
       <ActiveFilters
+      
         filter={{
           categories: ["development"],
           price: ["free"],

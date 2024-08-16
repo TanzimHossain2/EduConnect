@@ -1,12 +1,15 @@
-import Link from "next/link";
-import Image from "next/image";
-import { BookOpen } from "lucide-react";
-import { ArrowRightIcon } from "lucide-react";
-import { ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ICourse } from "@/interface/courses";
 import { formatPrice } from "@/lib/formatPrice";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { ArrowRight, BookOpen } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
-const CourseCard = ({course}) => {
+interface CourseCardProps {
+  course: ICourse;
+}
+
+const CourseCard : React.FC<CourseCardProps> = ({course}) => {
   return (
     <Link key={course.id} href={`/courses/${course.id}`}>
     <div className="group hover:shadow-sm transition overflow-hidden border rounded-lg p-3 h-full">

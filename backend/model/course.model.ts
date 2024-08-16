@@ -3,10 +3,12 @@ import mongoose, { Schema } from "mongoose";
 
 const courseSchema = new Schema<ICourse>({
   title: { type: String, required: true },
+  subtitle: { type: String, required: true },
   description: { type: String, required: true },
   price: { type: Number, required: true },
   thumbnail: { type: String, required: true },
   modules: [{ type: Schema.Types.ObjectId, ref: "Module" }],
+  learning: [{ type: String }],
   active: { type: Boolean, default: true },
   category: { type: Schema.Types.ObjectId, ref: "Category" },
   instructor: { type: Schema.Types.ObjectId, ref: "User" },

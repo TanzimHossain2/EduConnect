@@ -60,31 +60,66 @@ const CATEGORY_OPTIONS = [
     },
 ];
 
+interface FilterState {
+  categories: string[];
+  price: string[];
+  sort: string;
+}
 
 const FilterCourse = () => {
 
-    const [filter, setFilter] = useState({
-        categories: ["development"],
-        price: ["free"],
-        sort: "",
-    });
+  const [filter, setFilter] = useState<FilterState>({
+    categories: ["development"],
+    price: ["free"],
+    sort: "",
+  });
 
-    //   apply checkbox filter
-    const applyArrayFilter = ({ type, value }) => {
-        const isFilterApplied = filter[type].includes(value);
+    // //   apply checkbox filter
+    // const applyArrayFilter = ({ type, value }) => {
+    //     const isFilterApplied = filter[type].includes(value);
 
-        if (isFilterApplied) {
-            setFilter((prev) => ({
-                ...prev,
-                [type]: prev[type].filter((v) => v !== value),
-            }));
-        } else {
-            setFilter((prev) => ({
-                ...prev,
-                [type]: [...prev[type], value],
-            }));
-        }
-    };
+    //     if (isFilterApplied) {
+    //         setFilter((prev) => ({
+    //             ...prev,
+    //             [type]: prev[type].filter((v) => v !== value),
+    //         }));
+    //     } else {
+    //         setFilter((prev) => ({
+    //             ...prev,
+    //             [type]: [...prev[type], value],
+    //         }));
+    //     }
+    // };
+
+
+    // Apply checkbox filter
+const applyArrayFilter = ({
+  type,
+  value,
+}: {
+  type: keyof FilterState;
+  value: string;
+}) => {
+  setFilter((prev) => {
+    const currentFilterValue = prev[type];
+
+    // Ensure that currentFilterValue is treated as an array
+    if (Array.isArray(currentFilterValue)) {
+      const isFilterApplied = currentFilterValue.includes(value);
+
+      return {
+        ...prev,
+        [type]: isFilterApplied
+          ? currentFilterValue.filter((v) => v !== value)
+          : [...currentFilterValue, value],
+      };
+    }
+
+    // If the value is not an array, return the previous state
+    return prev;
+  });
+};
+
 
 
   return (
@@ -101,7 +136,6 @@ const FilterCourse = () => {
                     {CATEGORY_OPTIONS.map((option, optionIdx) => (
                       <li key={option.value} className="flex items-center">
                         <Checkbox
-                          type="checkbox"
                           id={`category-${optionIdx}`}
                           onCheckedChange={() => {
                             applyArrayFilter({
@@ -133,7 +167,7 @@ const FilterCourse = () => {
                     {PRICE_OPTIONS.map((option, optionIdx) => (
                       <li key={option.value} className="flex items-center">
                         <Checkbox
-                          type="checkbox"
+                     
                           id={`price-${optionIdx}`}
                           onCheckedChange={() => {
                             applyArrayFilter({

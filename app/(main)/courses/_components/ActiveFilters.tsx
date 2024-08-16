@@ -2,7 +2,18 @@
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 
-const ActiveFilters = ({ filter }) => {
+interface FilterProps {
+  categories: string[];
+  price: string[];
+  sort: string;
+}
+
+const ActiveFilters  = ({ filter }: {filter: FilterProps}) => {
+
+  const applyArrayFilter = ({ type, value }: { type: string; value: string }) => {
+    // apply filter
+  };
+
   return (
     <div className="flex items-center gap-2 flex-wrap">
       {/* active categories */}

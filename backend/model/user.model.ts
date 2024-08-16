@@ -2,8 +2,8 @@ import { IUser } from "@/interface/courses";
 import mongoose, { Schema } from "mongoose";
 
 const userSchema = new Schema<IUser>({
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
+  first_name: { type: String, required: true },
+  last_name: { type: String, required: true },
   password: { type: String, required: true },
   email: {
     type: String,
@@ -24,8 +24,9 @@ const userSchema = new Schema<IUser>({
     default: "student",
   },
   bio: { type: String, required: false },
-  socialMedia: { type: Object, required: false },
-  profilePicture: { type: String, required: false },
+  social_media: { type: Object, required: false },
+  profile_picture: { type: String, required: false },
+  designation: { type: String, required: false },
 },{timestamps: true});
 
 const UserModel: mongoose.Model<IUser> =
