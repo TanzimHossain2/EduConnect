@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 
 import { MobileNav } from "@/components/mobile-nav";
 import { Menu, X } from "lucide-react";
+import { signOut, useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 import { Logo } from "./logo";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button, buttonVariants } from "./ui/button";
@@ -15,7 +17,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { useSession, signOut } from "next-auth/react";
 
 export function MainNav({
   items,
@@ -28,6 +29,10 @@ export function MainNav({
   const [loginSession, setLoginSession] = useState<any>(null);
 
   const { data: session } = useSession();
+
+  if (session?.error === "RefreshAccessTokenError") {
+    redirect("/login");
+  }
 
   useEffect(() => {
     if (session) {
@@ -87,8 +92,7 @@ export function MainNav({
             </DropdownMenu>
           </div>
         )}
-        
-       
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <div className="cursor-pointer">
@@ -112,15 +116,14 @@ export function MainNav({
               <Link href="">Testimonials & Certificates</Link>
             </DropdownMenuItem>
             {loginSession && (
-            <DropdownMenuItem className="cursor-pointer" asChild>
-              <Link href="#" onClick={() => signOut()}>
-                Logout
-              </Link>
-            </DropdownMenuItem>
-                 )}
+              <DropdownMenuItem className="cursor-pointer" asChild>
+                <Link href="#" onClick={() => signOut()}>
+                  Logout
+                </Link>
+              </DropdownMenuItem>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
-   
 
         <button
           className="flex items-center space-x-2 lg:hidden"
