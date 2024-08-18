@@ -8,6 +8,7 @@ import {
 import { SectionTitle } from "@/components/section-title";
 import { ITestimonial } from "@/interface/courses";
 import StarRating from "@/components/star-rating";
+import Image from "next/image";
 
 interface TestimonialsProps {
   testimonials: ITestimonial[];
@@ -35,7 +36,7 @@ const Testimonials: React.FC<TestimonialsProps> = ({ testimonials }) => {
                 <div className="sm:break-inside-avoid">
                   <blockquote className="rounded-lg bg-gray-50 p-6  sm:p-8 shadow-sm">
                     <div className="flex items-center gap-4">
-                      <img
+                      <Image
                         alt=""
                         src="https://i.pravatar.cc/56"
                         width="56"
