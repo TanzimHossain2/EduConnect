@@ -88,7 +88,7 @@ export function MainNav({
           </div>
         )}
         
-        {loginSession && (
+       
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <div className="cursor-pointer">
@@ -103,22 +103,24 @@ export function MainNav({
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56 mt-4">
             <DropdownMenuItem className="cursor-pointer" asChild>
-              <Link href="account">Profile</Link>
+              <Link href="/account">Profile</Link>
             </DropdownMenuItem>
             <DropdownMenuItem className="cursor-pointer" asChild>
-              <Link href="account/enrolled-courses">My Courses</Link>
+              <Link href="/account/enrolled-courses">My Courses</Link>
             </DropdownMenuItem>
             <DropdownMenuItem className="cursor-pointer" asChild>
               <Link href="">Testimonials & Certificates</Link>
             </DropdownMenuItem>
+            {loginSession && (
             <DropdownMenuItem className="cursor-pointer" asChild>
               <Link href="#" onClick={() => signOut()}>
                 Logout
               </Link>
             </DropdownMenuItem>
+                 )}
           </DropdownMenuContent>
         </DropdownMenu>
-        )}
+   
 
         <button
           className="flex items-center space-x-2 lg:hidden"

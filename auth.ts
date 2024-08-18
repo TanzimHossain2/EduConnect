@@ -3,6 +3,7 @@ import NextAuth from "next-auth";
 import CredentialProvider from "next-auth/providers/credentials";
 import { db } from "./backend/model";
 import { hashMatched } from "./utils/hasing";
+import { authConfig } from "./auth.config";
 
 export const {
   handlers: { GET, POST },
@@ -10,13 +11,12 @@ export const {
   signIn,
   signOut,
 } = NextAuth({
-  session: {
-    strategy: "jwt",
-  },
+  ...authConfig,
+
   providers: [
     CredentialProvider({
-        
-      async authorize(credentials) {
+
+      async authorize(credentials): Promise<any> {
         if (credentials == null) {
           return null;
         }
@@ -26,7 +26,6 @@ export const {
             email: credentials.email,
           });
    
-
           if (user) {
             const isMatch = await hashMatched(
                 credentials.password as string,
