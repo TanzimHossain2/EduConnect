@@ -106,7 +106,7 @@ const RelatedCourses = () => {
                           {formatPrice(49)}
                         </p>
 
-                        <EnrollCourse asLink={true} />
+                        <EnrollCourse asLink={true} course={course} />
                       </div>
                     </div>
                   </div>

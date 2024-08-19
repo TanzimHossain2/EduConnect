@@ -14,17 +14,13 @@ const SingleCoursePage = async ({ params: { id } }: any) => {
 
   return (
     <>
-      <CourseDetailsIntro
-        title={course?.title}
-        subtitle={course?.subtitle}
-        thumbnail={course?.thumbnail}
-      />
+      <CourseDetailsIntro course={course} />
 
       <CourseDetails course={course} />
 
       {course?.testimonials && <Testimonials testimonials={testimonials} />}
 
-      <RelatedCourses />
+      {/* <RelatedCourses /> */}
     </>
   );
 };

@@ -82,7 +82,9 @@ export const getCourseDetails = async (id: string) => {
     })
     .lean();
 
-  return replaceMongoIdInObject(course as NonNullable<typeof course>);
+  return replaceMongoIdInObject(
+    course as NonNullable<typeof course>
+  ) as ICourse;
 };
 
 export const getCourseDetailsByInstructor = async (id: string) => {

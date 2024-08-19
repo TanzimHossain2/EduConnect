@@ -94,32 +94,33 @@ export const {
     }),
   ],
 
-  callbacks: {
-    async jwt({ token, user, account }) {
-      if (account && user) {
-        return {
-          accessToken: account?.access_token,
-          accessTokenExpires: account?.expires_in
-            ? Date.now() + account.expires_in * 1000
-            : 0,
-          refreshToken: account?.refresh_token,
-          user,
-        };
-      }
+  // callbacks: {
+  //   async jwt({ token, user, account }) {
+  //     if (account && user) {
+  //       return {
+  //         accessToken: account?.access_token,
+  //         accessTokenExpires: account?.expires_in
+  //           ? Date.now() + account.expires_in * 1000
+  //           : 0,
+  //         refreshToken: account?.refresh_token,
+  //         user,
+  //       };
+  //     }
 
-      if (Date.now() < (token?.accessTokenExpires as number)) {
-        return token;
-      }
+  //     if (Date.now() < (token?.accessTokenExpires as number)) {
+  //       return token;
+  //     }
 
-      return refreshAccessToken(token);
-    },
+  //     return refreshAccessToken(token);
+  //   },
 
-    async session({ session, token }) {
-      session.accessToken = token?.accessToken;
-      session.user = token?.user as any;
-      session.error = token?.error as "RefreshAccessTokenError" | null;
+  //   async session({ session, token }) {
+  //     session.accessToken = token?.accessToken;
+  //     session.user = token?.user as any;
+  //     session.error = token?.error as "RefreshAccessTokenError" | null;
 
-      return session;
-    },
-  },
+  //     return session;
+  //   },
+  // },
+
 });

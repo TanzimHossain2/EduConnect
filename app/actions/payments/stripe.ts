@@ -6,9 +6,13 @@ import { headers } from "next/headers";
 
 const currency = "usd";
 
-export const createCheckoutSession = async (data: Object) => {
+export const createCheckoutSession = async (data: FormData) => {
+
   const ui_mode = "hosted";
   const origin = headers().get("origin");
+  const courseId = data.get("courseId") as string;
+  const courseName = data.get("courseName") as string;
+  const coursePrice = parseFloat(data.get("coursePrice") as string);
 
   const checkoutSession = await stripe.checkout.sessions.create({
     mode: "payment",
@@ -19,14 +23,14 @@ export const createCheckoutSession = async (data: Object) => {
         price_data: {
           currency: currency,
           product_data: {
-            name: "Educonnect Course",
+            name: courseName,
           },
-          unit_amount: formatAmountForStripe(10.5, currency),
+          unit_amount: formatAmountForStripe(coursePrice, currency),
         },
       },
     ],
     ...(ui_mode === "hosted" && {
-      success_url: `${origin}/enroll-success?session_id={CHECKOUT_SESSION_ID}&courseId=12445`,
+      success_url: `${origin}/enroll-success?session_id={CHECKOUT_SESSION_ID}&courseId=${courseId}`,
 
       cancel_url: `${origin}/courses`,
     }),
@@ -38,9 +42,10 @@ export const createCheckoutSession = async (data: Object) => {
   };
 };
 
-export async function createPaymentIntent(data: any) {
+export async function createPaymentIntent(data: FormData) {
+  const coursePrice = parseFloat(data.get("coursePrice") as string);
   const paymentIntent = await stripe.paymentIntents.create({
-    amount: formatAmountForStripe(10.5,currency),
+    amount: formatAmountForStripe(coursePrice ,currency),
 
     automatic_payment_methods: { enabled: true },
 

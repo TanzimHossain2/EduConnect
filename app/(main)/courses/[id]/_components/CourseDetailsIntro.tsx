@@ -1,20 +1,16 @@
 import EnrollCourse from "@/components/enroll-course";
 import { buttonVariants } from "@/components/ui/button";
+import { ICourse } from "@/interface/courses";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 
 interface Props {
-  title: string;
-  subtitle: string;
-  thumbnail: string;
+  course: ICourse;
 }
 
-const CourseDetailsIntro: React.FC<Props> = ({
-  title,
-  subtitle,
-  thumbnail,
-}) => {
+const CourseDetailsIntro: React.FC<Props> = ({ course }) => {
+  const { title, subtitle, thumbnail } = course;
   return (
     <div className="overflow-x-hidden  grainy">
       <section className="pt-12  sm:pt-16">
@@ -32,7 +28,7 @@ const CourseDetailsIntro: React.FC<Props> = ({
               </p>
 
               <div className="mt-6 flex items-center justify-center flex-wrap gap-3">
-                <EnrollCourse asLink={false} />
+                <EnrollCourse asLink={false} course={course} />
 
                 <Link
                   href=""
