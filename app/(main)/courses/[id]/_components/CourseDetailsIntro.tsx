@@ -1,3 +1,4 @@
+import EnrollCourse from "@/components/enroll-course";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
@@ -31,9 +32,8 @@ const CourseDetailsIntro: React.FC<Props> = ({
               </p>
 
               <div className="mt-6 flex items-center justify-center flex-wrap gap-3">
-                <Link href="" className={cn(buttonVariants({ size: "lg" }))}>
-                  Enroll Now
-                </Link>
+                <EnrollCourse asLink={false} />
+
                 <Link
                   href=""
                   className={cn(

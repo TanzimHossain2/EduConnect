@@ -1,6 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ICourse } from "@/interface/courses";
-import { formatMyDate } from "@/lib/date";
+import { formatMyDate } from "@/utils/date";
 import CourseCurriculam from "./CourseCurriculam";
 import CourseInstructor from "./CourseInstructor";
 import CourseOverview from "./CourseOverview";

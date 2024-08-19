@@ -4,7 +4,7 @@ import { ICourse } from "@/interface/courses";
 import {
   replaceMongoIdInArray,
   replaceMongoIdInObject,
-} from "@/lib/convertData";
+} from "@/utils/convertData";
 import { getEnrollmentsForCourse } from "./enrollments";
 import { getTestimonialsForCourse } from "./testimonials";
 

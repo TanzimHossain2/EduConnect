@@ -1,5 +1,5 @@
 import { db } from "@/backend/model";
-import { replaceMongoIdInArray } from "@/lib/convertData";
+import { replaceMongoIdInArray } from "@/utils/convertData";
 
 export const getEnrollmentsForCourse = async (courseId: string) => {
   try {

@@ -1,6 +1,6 @@
 import { getCourseDetails } from "@/backend/services/courses/courses";
 import { ICourse, ITestimonial } from "@/interface/courses";
-import { replaceMongoIdInArray } from "@/lib/convertData";
+import { replaceMongoIdInArray } from "@/utils/convertData";
 import CourseDetails from "./_components/CourseDetails";
 import CourseDetailsIntro from "./_components/CourseDetailsIntro";
 import RelatedCourses from "./_components/RelatedCourses";

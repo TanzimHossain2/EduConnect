@@ -20,6 +20,8 @@ const CourseInstructor: React.FC<Props> = async ({ course }) => {
         <div className="h-[310px] w-[270px] max-w-full  flex-none rounded mb-5 md:mb-0">
           <Image
             src={instructor?.profile_picture}
+            width={270}
+            height={310}
             alt={instructorName}
             className="w-full h-full object-cover rounded"
           />
