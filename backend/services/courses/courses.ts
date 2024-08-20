@@ -4,7 +4,7 @@ import { ICourse } from "@/interface/courses";
 import {
   replaceMongoIdInArray,
   replaceMongoIdInObject,
-} from "@/lib/convertData";
+} from "@/utils/convertData";
 import { getEnrollmentsForCourse } from "./enrollments";
 import { getTestimonialsForCourse } from "./testimonials";
 
@@ -82,7 +82,9 @@ export const getCourseDetails = async (id: string) => {
     })
     .lean();
 
-  return replaceMongoIdInObject(course as NonNullable<typeof course>);
+  return replaceMongoIdInObject(
+    course as NonNullable<typeof course>
+  ) as ICourse;
 };
 
 export const getCourseDetailsByInstructor = async (id: string) => {

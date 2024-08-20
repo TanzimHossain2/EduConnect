@@ -1,6 +1,7 @@
 import { getCourseDetailsByInstructor } from "@/backend/services/courses/courses";
 import { ICourse } from "@/interface/courses";
 import { MessageSquare, Presentation, Star, UsersRound } from "lucide-react";
+import Image from "next/image";
 
 interface Props {
   course: ICourse;
@@ -8,7 +9,7 @@ interface Props {
 
 const CourseInstructor: React.FC<Props> = async ({ course }) => {
   const instructor = course?.instructor;
-  const instructorName = `${instructor?.first_name} ${instructor?.last_name}`;
+  const instructorName = `${instructor?.firstName} ${instructor?.lastName}`;
   const CourseDetailsByInstructor = await getCourseDetailsByInstructor(
     instructor._id.toString()
   );
@@ -17,8 +18,10 @@ const CourseInstructor: React.FC<Props> = async ({ course }) => {
     <div className="bg-gray-50 rounded-md p-8">
       <div className="md:flex md:gap-x-5 mb-8">
         <div className="h-[310px] w-[270px] max-w-full  flex-none rounded mb-5 md:mb-0">
-          <img
-            src={instructor?.profile_picture}
+          <Image
+            src={instructor?.profilePicture}
+            width={270}
+            height={310}
             alt={instructorName}
             className="w-full h-full object-cover rounded"
           />

@@ -1,6 +1,6 @@
 import { getCourseDetails } from "@/backend/services/courses/courses";
 import { ICourse, ITestimonial } from "@/interface/courses";
-import { replaceMongoIdInArray } from "@/lib/convertData";
+import { replaceMongoIdInArray } from "@/utils/convertData";
 import CourseDetails from "./_components/CourseDetails";
 import CourseDetailsIntro from "./_components/CourseDetailsIntro";
 import RelatedCourses from "./_components/RelatedCourses";
@@ -14,17 +14,13 @@ const SingleCoursePage = async ({ params: { id } }: any) => {
 
   return (
     <>
-      <CourseDetailsIntro
-        title={course?.title}
-        subtitle={course?.subtitle}
-        thumbnail={course?.thumbnail}
-      />
+      <CourseDetailsIntro course={course} />
 
       <CourseDetails course={course} />
 
       {course?.testimonials && <Testimonials testimonials={testimonials} />}
 
-      <RelatedCourses />
+      {/* <RelatedCourses /> */}
     </>
   );
 };

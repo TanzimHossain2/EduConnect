@@ -1,9 +1,10 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ICourse } from "@/interface/courses";
-import { formatMyDate } from "@/lib/date";
+import { formatMyDate } from "@/utils/date";
 import CourseCurriculam from "./CourseCurriculam";
 import CourseInstructor from "./CourseInstructor";
 import CourseOverview from "./CourseOverview";
+import Image from "next/image";
 
 interface CourseDetailsProps {
   course: ICourse;
@@ -25,15 +26,15 @@ const CourseDetails: React.FC<CourseDetailsProps> = ({ course }) => {
         {/*  */}
         <div className="flex sm:items-center gap-5 flex-col sm:flex-row sm:gap-6 md:gap-20 mt-6">
           <div className="flex items-center gap-2">
-            <img
+            <Image
               className="w-[40px] h-[40px] rounded-full"
-              src={course?.instructor?.profile_picture}
-              alt={course?.instructor?.first_name}
+              src={course?.instructor?.profilePicture}
+              alt={course?.instructor?.firstName}
               height="40"
               width="40"
             />
             <p className="font-bold">
-              {course?.instructor?.first_name} {course?.instructor?.last_name}
+              {course?.instructor?.firstName} {course?.instructor?.lastName}
             </p>
           </div>
           <div className="flex items-center gap-2 text-sm">

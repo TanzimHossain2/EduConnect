@@ -4,7 +4,7 @@ import mongoose, { Schema } from "mongoose";
 const enrollmentSchema = new Schema<IEnrollment>({
     course: { type: Schema.Types.ObjectId, ref: "Course" },
     student: { type: Schema.Types.ObjectId, ref: "User" },
-    completion_date : { type: Date },
+    completion_date : { type: Date, required: false },
     enrollment_date : { type: Date, required: true },
     status : { type: String, required: true },
     method : { type: String },
