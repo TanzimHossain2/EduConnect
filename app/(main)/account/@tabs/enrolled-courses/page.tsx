@@ -1,3 +1,5 @@
+
+
 //import { CourseProgress } from "@/components/course-progress";
 import { Badge } from "@/components/ui/badge";
 import { BookOpen } from "lucide-react";
@@ -34,7 +36,7 @@ function EnrolledCourses() {
 								Total Modules: 10
 							</p>
 							<p className="text-md md:text-sm font-medium text-slate-700">
-								Completed Modules <Badge variant="success">05</Badge>
+								Completed Modules <Badge variant="default">05</Badge>
 							</p>
 						</div>
 						<div className="flex items-center justify-between mt-2">
@@ -43,7 +45,7 @@ function EnrolledCourses() {
 							</p>
 
 							<p className="text-md md:text-sm font-medium text-slate-700">
-								Quiz taken <Badge variant="success">10</Badge>
+								Quiz taken <Badge variant="default">10</Badge>
 							</p>
 						</div>
 						<div className="flex items-center justify-between mt-2">
@@ -78,7 +80,7 @@ function EnrolledCourses() {
 					{/*<CourseProgress
 						size="sm"
 						value={80}
-						variant={110 === 100 ? "success" : ""}
+						variant={default 100 ? "success" : ""}
 	/>*/}
 				</div>
 			</div>
@@ -110,7 +112,7 @@ function EnrolledCourses() {
 								Total Modules: 10
 							</p>
 							<p className="text-md md:text-sm font-medium text-slate-700">
-								Completed Modules <Badge variant="success">05</Badge>
+								Completed Modules <Badge variant="default">05</Badge>
 							</p>
 						</div>
 						<div className="flex items-center justify-between mt-2">
@@ -119,7 +121,7 @@ function EnrolledCourses() {
 							</p>
 
 							<p className="text-md md:text-sm font-medium text-slate-700">
-								Quiz taken <Badge variant="success">10</Badge>
+								Quiz taken <Badge variant="default">10</Badge>
 							</p>
 						</div>
 						<div className="flex items-center justify-between mt-2">
@@ -154,7 +156,7 @@ function EnrolledCourses() {
 					{/*<CourseProgress
 						size="sm"
 						value={80}
-						variant={110 === 100 ? "success" : ""}
+						variant={default 100 ? "success" : ""}
 	/>*/}
 				</div>
 			</div>
@@ -186,7 +188,7 @@ function EnrolledCourses() {
 								Total Modules: 10
 							</p>
 							<p className="text-md md:text-sm font-medium text-slate-700">
-								Completed Modules <Badge variant="success">05</Badge>
+								Completed Modules <Badge variant="default">05</Badge>
 							</p>
 						</div>
 						<div className="flex items-center justify-between mt-2">
@@ -195,7 +197,7 @@ function EnrolledCourses() {
 							</p>
 
 							<p className="text-md md:text-sm font-medium text-slate-700">
-								Quiz taken <Badge variant="success">10</Badge>
+								Quiz taken <Badge variant="default">10</Badge>
 							</p>
 						</div>
 						<div className="flex items-center justify-between mt-2">
@@ -230,7 +232,7 @@ function EnrolledCourses() {
 					{/*<CourseProgress
 						size="sm"
 						value={80}
-						variant={110 === 100 ? "success" : ""}
+						variant={default 100 ? "success" : ""}
 	/>*/}
 				</div>
 			</div>
@@ -262,7 +264,7 @@ function EnrolledCourses() {
 								Total Modules: 10
 							</p>
 							<p className="text-md md:text-sm font-medium text-slate-700">
-								Completed Modules <Badge variant="success">05</Badge>
+								Completed Modules <Badge variant="default">05</Badge>
 							</p>
 						</div>
 						<div className="flex items-center justify-between mt-2">
@@ -271,7 +273,7 @@ function EnrolledCourses() {
 							</p>
 
 							<p className="text-md md:text-sm font-medium text-slate-700">
-								Quiz taken <Badge variant="success">10</Badge>
+								Quiz taken <Badge variant="default">10</Badge>
 							</p>
 						</div>
 						<div className="flex items-center justify-between mt-2">
@@ -306,7 +308,7 @@ function EnrolledCourses() {
 					{/*<CourseProgress
 						size="sm"
 						value={80}
-						variant={110 === 100 ? "success" : ""}
+						variant={default 100 ? "success" : ""}
 	/>*/}
 				</div>
 			</div>

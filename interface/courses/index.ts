@@ -25,6 +25,14 @@ export interface ICategory {
   thumbnail: string;
 }
 
+interface SocialMediaLinks {
+  twitter?: string;
+  linkedin?: string;
+  gitHub?: string;
+  facebook?: string;
+  website?: string;
+}
+
 type role = "admin" | "instructor" | "student";
 export interface IUser {
   [x: string]: any;
@@ -36,7 +44,9 @@ export interface IUser {
   phone: string;
   role: role;
   bio: string;
-  socialMedia: object;
+  SocialMedia: {
+    [key: string]: string;
+  };
   profilePicture: string;
   designation: string;
 }

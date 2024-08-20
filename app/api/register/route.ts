@@ -18,7 +18,7 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
   const newUser = {
     firstName,
     lastName,
-    email,
+    email: email.toLowerCase(),
     phone,
     password: hashedPassword,
     role: userRole,

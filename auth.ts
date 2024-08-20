@@ -4,9 +4,8 @@ import GoogleProvider from "next-auth/providers/google";
 import { authConfig } from "./auth.config";
 import { db } from "./backend/model";
 import { hashMatched } from "./utils/hasing";
-import { MongoDBAdapter } from "@auth/mongodb-adapter"
+import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import client from "./lib/mongoClient";
-
 
 async function refreshAccessToken(token: any) {
   try {
@@ -52,7 +51,7 @@ export const {
   signIn,
   signOut,
 } = NextAuth({
-  adapter:  MongoDBAdapter(client),
+  adapter: MongoDBAdapter(client),
   ...authConfig,
 
   providers: [
@@ -61,6 +60,7 @@ export const {
         if (credentials == null) {
           return null;
         }
+        
 
         try {
           const user = await db.user.findOne({
@@ -101,15 +101,44 @@ export const {
           id: profile.sub,
           firstName: profile.given_name,
           lastName: profile.family_name,
-          email: profile.email, 
+          email: profile.email,
           profilePicture: profile.picture,
-          role: profile.role ?? "student", 
+          role: profile.role ?? "student",
           phone: `+${Date.now()}`,
           createdAt: new Date(),
           updatedAt: new Date(),
-        }
-      }
+        };
+      },
     }),
   ],
+
+  // callbacks: {
+  //   async jwt({ token, user, account }) {
+  //     if (account && user) {
+  //       return {
+  //         accessToken: account?.access_token,
+  //         accessTokenExpires: account?.expires_in
+  //           ? Date.now() + account.expires_in * 1000
+  //           : 0,
+  //         refreshToken: account?.refresh_token,
+  //         user,
+  //       };
+  //     }
+
+  //     if (Date.now() < (token?.accessTokenExpires as number)) {
+  //       return token;
+  //     }
+
+  //     return refreshAccessToken(token);
+  //   },
+
+  //   async session({ session, token }) {
+  //     session.accessToken = token?.accessToken;
+  //     session.user = token?.user as any;
+  //     session.error = token?.error as "RefreshAccessTokenError" | null;
+
+  //     return session;
+  //   },
+  // },
 
 });

@@ -9,7 +9,7 @@ import { Menu, X } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { Logo } from "./logo";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import NavAvatar from "./nav-avatar";
 import { Button, buttonVariants } from "./ui/button";
 import {
   DropdownMenu,
@@ -96,15 +96,10 @@ export function MainNav({
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <div className="cursor-pointer">
-              <Avatar>
-                <AvatarImage
-                  src="https://github.com/shadcn.png"
-                  alt="@shadcn"
-                />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
+              <NavAvatar />
             </div>
           </DropdownMenuTrigger>
+
           <DropdownMenuContent align="end" className="w-56 mt-4">
             <DropdownMenuItem className="cursor-pointer" asChild>
               <Link href="/account">Profile</Link>

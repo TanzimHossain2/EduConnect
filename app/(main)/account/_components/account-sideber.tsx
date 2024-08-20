@@ -1,7 +1,9 @@
-import { useLoggedInUser } from "@/hooks/uese-loggedIn-user";
+
+import { useLoggedInUser } from "@/hooks/use-loggedIn-user";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import Menu from "./account-menu";
+import ProfilePicture from "./profile-pic";
 
 const AccountSidebar = async () => {
   const LoggedInUser = await useLoggedInUser();
@@ -10,7 +12,6 @@ const AccountSidebar = async () => {
     redirect("/login");
   }
 
-
   return (
     <>
       {" "}
@@ -18,35 +19,16 @@ const AccountSidebar = async () => {
         <div className="relative">
           <div className="p-6 rounded-md shadow dark:shadow-gray-800 bg-white dark:bg-slate-900">
             <div className="profile-pic text-center mb-5">
-              <input
-                id="pro-img"
-                name="profile-image"
-                type="file"
-                className="hidden"
-                // onchange="loadFile(event)"
-              />
+              <div className="relative size-28 mx-auto">
+               <ProfilePicture firstName={LoggedInUser?.firstName}  profilePicture={LoggedInUser?.profilePicture} email={LoggedInUser?.email}  />
+              </div>
+
               <div>
-                <div className="relative size-28 mx-auto">
-                  <Image
-                    src={LoggedInUser?.profilePicture}
-                    className="rounded-full shadow dark:shadow-gray-800 ring-4 ring-slate-50 dark:ring-slate-800"
-                    id="profile-banner"
-                    alt={LoggedInUser?.firstName}
-                    width={112}
-                    height={112}
-                  />
-                  <label
-                    className="absolute inset-0 cursor-pointer"
-                    htmlFor="pro-img"
-                  />
-                </div>
                 <div className="mt-4">
                   <h5 className="text-lg font-semibold">
                     {LoggedInUser?.firstName} {LoggedInUser?.lastName}
                   </h5>
-                  <p className="text-slate-400">
-                    {LoggedInUser?.email}
-                  </p>
+                  <p className="text-slate-400">{LoggedInUser?.email}</p>
                 </div>
               </div>
             </div>

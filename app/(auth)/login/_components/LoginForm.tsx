@@ -15,6 +15,8 @@ import { Label } from "@/components/ui/label";
 import { credentialLogin } from "@/app/actions/auth";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+
 
 export function LoginForm() {
   const [error, setError] = useState<string | null>(null);
@@ -26,14 +28,16 @@ export function LoginForm() {
 
     try {
       const res = await credentialLogin(formData);
-      
+
       if (!!res.error) {
         setError(res.error);
+        toast.error(res.error);
       } else {
         router.push("/courses");
       }
     } catch (err) {
       setError((err as Error).message);
+      toast.error((err as Error).message);
     }
   };
 

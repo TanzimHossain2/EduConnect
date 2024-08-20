@@ -16,3 +16,16 @@ diagrams folder contains the diagram of the project in the form of a .drawio fil
 - [x] Show course Instructor
 - [x] Register as a student, instructor
 - [x] Login as a student, instructor
+- [x] Show Profile
+- [x] Update Profile
+- [x] Update profile picture
+
+
+## Extra Feature
+
+-[x] Use cloudinary to store image
+-[x] Use Auth.js for authentication
+
+
+
+

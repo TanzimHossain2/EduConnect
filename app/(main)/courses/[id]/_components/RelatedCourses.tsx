@@ -1,3 +1,5 @@
+// @ts-ignore: Skip TypeScript error for this page
+
 import EnrollCourse from "@/components/enroll-course";
 import { SectionTitle } from "@/components/section-title";
 import {
@@ -106,7 +108,7 @@ const RelatedCourses = () => {
                           {formatPrice(49)}
                         </p>
 
-                        <EnrollCourse asLink={true} courseId={course?.id} />
+                        {/* <EnrollCourse asLink={true} courseId={course?.id} /> */}
                       </div>
                     </div>
                   </div>

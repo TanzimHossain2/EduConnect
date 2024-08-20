@@ -12,11 +12,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { useState } from "react";
 
 type role = "instructor" | "student";
 
-export function SignupForm({ role }: { role: role }) {
+ const  SignupForm =({ role }: { role: role })=> {
   const router = useRouter();
+
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -31,6 +35,11 @@ export function SignupForm({ role }: { role: role }) {
       const phone = formData.get("phone") as string;
       const confirmPassword = formData.get("confirmPassword") as string;
       const userRole = role === ("student" || "instructor") ? role : "student";
+
+      if (password !== confirmPassword) {
+        toast.error("Passwords do not match!", { duration: 3000 });
+        return;
+      }
 
       const response = await fetch("/api/register", {
         method: "POST",
@@ -51,6 +60,8 @@ export function SignupForm({ role }: { role: role }) {
     } catch (error) {
       //@ts-expect-error
       console.log(error.message);
+      setError((error as any).message);
+      toast.error((error as any).message);
     }
   };
 
@@ -63,6 +74,12 @@ export function SignupForm({ role }: { role: role }) {
         </CardDescription>
       </CardHeader>
       <CardContent>
+        {error && (
+          <div className="bg-red-100 p-2 text-red-600 text-sm rounded">
+            {error}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4">
             <div className="grid grid-cols-2 gap-4">
@@ -134,3 +151,5 @@ export function SignupForm({ role }: { role: role }) {
     </Card>
   );
 }
+
+export default SignupForm;
