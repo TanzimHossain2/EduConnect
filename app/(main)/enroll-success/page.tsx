@@ -44,13 +44,13 @@ const SuccessPage: React.FC<SuccessParams> = async ({
   const paymentStatus = (paymentIntent as Stripe.PaymentIntent)?.status;
 
   // customer info
-  const customerName = loggedInUser?.first_name + " " + loggedInUser?.last_name;
+  const customerName = loggedInUser?.firstName + " " + loggedInUser?.lastName;
   const customerEmail = loggedInUser?.email;
   const productName = course?.title;
 
   // instructor info
   const instructorName =
-    course?.instructor?.first_name + " " + course?.instructor?.last_name;
+    course?.instructor?.firstName + " " + course?.instructor?.lastName;
   const instructorEmail = course?.instructor?.email;
 
   if (paymentStatus === "succeeded") {

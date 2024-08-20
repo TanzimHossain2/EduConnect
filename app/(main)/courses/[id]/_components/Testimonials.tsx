@@ -45,8 +45,8 @@ const Testimonials: React.FC<TestimonialsProps> = ({ testimonials }) => {
                       />
                       <div>
                         <p className="mt-0.5 text-lg font-medium text-gray-900">
-                          {testimonial?.user?.first_name}{" "}
-                          {testimonial?.user?.last_name}
+                          {testimonial?.user?.firstName}{" "}
+                          {testimonial?.user?.lastName}
                         </p>
                         <div className="flex justify-center gap-0.5 text-yellow-600">
                           <StarRating rating={testimonial?.rating} />

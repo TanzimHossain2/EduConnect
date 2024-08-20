@@ -28,10 +28,10 @@ const AccountSidebar = async () => {
               <div>
                 <div className="relative size-28 mx-auto">
                   <Image
-                    src={LoggedInUser?.profile_picture}
+                    src={LoggedInUser?.profilePicture}
                     className="rounded-full shadow dark:shadow-gray-800 ring-4 ring-slate-50 dark:ring-slate-800"
                     id="profile-banner"
-                    alt={LoggedInUser?.first_name}
+                    alt={LoggedInUser?.firstName}
                     width={112}
                     height={112}
                   />
@@ -42,7 +42,7 @@ const AccountSidebar = async () => {
                 </div>
                 <div className="mt-4">
                   <h5 className="text-lg font-semibold">
-                    {LoggedInUser?.first_name} {LoggedInUser?.last_name}
+                    {LoggedInUser?.firstName} {LoggedInUser?.lastName}
                   </h5>
                   <p className="text-slate-400">
                     {LoggedInUser?.email}

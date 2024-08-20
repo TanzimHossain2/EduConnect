@@ -29,15 +29,15 @@ type role = "admin" | "instructor" | "student";
 export interface IUser {
   [x: string]: any;
   id: string;
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   password: string;
   email: string;
   phone: string;
   role: role;
   bio: string;
-  social_media: object;
-  profile_picture: string;
+  socialMedia: object;
+  profilePicture: string;
   designation: string;
 }
 

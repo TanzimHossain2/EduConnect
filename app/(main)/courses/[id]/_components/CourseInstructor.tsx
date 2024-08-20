@@ -9,7 +9,7 @@ interface Props {
 
 const CourseInstructor: React.FC<Props> = async ({ course }) => {
   const instructor = course?.instructor;
-  const instructorName = `${instructor?.first_name} ${instructor?.last_name}`;
+  const instructorName = `${instructor?.firstName} ${instructor?.lastName}`;
   const CourseDetailsByInstructor = await getCourseDetailsByInstructor(
     instructor._id.toString()
   );
@@ -19,7 +19,7 @@ const CourseInstructor: React.FC<Props> = async ({ course }) => {
       <div className="md:flex md:gap-x-5 mb-8">
         <div className="h-[310px] w-[270px] max-w-full  flex-none rounded mb-5 md:mb-0">
           <Image
-            src={instructor?.profile_picture}
+            src={instructor?.profilePicture}
             width={270}
             height={310}
             alt={instructorName}

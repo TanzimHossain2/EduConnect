@@ -8,22 +8,21 @@ import * as z from "zod";
 type ISchema = z.infer<typeof LoginSchema>;
 
 export const POST = async (req: NextRequest, res: NextResponse) => {
+
   await dbConnect();
 
-  const { first_name, last_name, email, password, userRole,phone } =
+  const { firstName, lastName, email, password, userRole, phone } =
     (await req.json()) as ISchema;
   const hashedPassword = await generateHash(password);
 
   const newUser = {
-    first_name,
-    last_name,
+    firstName,
+    lastName,
     email,
     phone,
     password: hashedPassword,
     role: userRole,
   };
-
-  console.log(newUser);
 
   try {
     await db.user.create(newUser);
