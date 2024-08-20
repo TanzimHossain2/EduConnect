@@ -28,7 +28,7 @@ const CourseDetailsIntro: React.FC<Props> = ({ course }) => {
               </p>
 
               <div className="mt-6 flex items-center justify-center flex-wrap gap-3">
-                <EnrollCourse asLink={false} course={course} />
+                <EnrollCourse asLink={false} courseId={course?.id} />
 
                 <Link
                   href=""
