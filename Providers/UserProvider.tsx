@@ -9,6 +9,7 @@ interface User {
   firstName: string;
   lastName: string;
   profilePicture: string;
+  role: "admin" | "instructor" | "student";
 }
 
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({

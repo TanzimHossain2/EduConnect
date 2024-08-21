@@ -2,8 +2,11 @@
 
 import { createCheckoutSession } from "@/app/actions/payments/stripe";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { useCurrentUser } from "@/hooks/use-current-user";
 import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
+import { useRouter } from "next/navigation";
+
 
 interface Props {
   asLink: boolean;
@@ -11,7 +14,20 @@ interface Props {
 }
 
 const EnrollCourse: React.FC<Props> = ({ asLink, courseId }) => {
+
+  const router = useRouter();
+  const user = useCurrentUser();
+
+
   const formAction = async (data: FormData) => {
+
+    //  if not logged in, redirect to login page
+    if (!user) {
+      router.push("/login");
+      return;
+    }
+
+
     //  await createCheckoutSession(data);
     const { url } = await createCheckoutSession(data);
     window.location.assign(url as string);

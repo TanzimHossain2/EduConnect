@@ -7,6 +7,7 @@ interface User {
   firstName: string;
   lastName: string;
   profilePicture: string;
+  role: "admin" | "instructor" | "student";
 }
 
 interface UserContextType {

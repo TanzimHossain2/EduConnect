@@ -24,7 +24,9 @@ export const getUserById = async (id : string) => {
         return null;
     }
 
-    const user = await db.user.findById(id).lean();
+    const user = await db.user.findById(id)
+    .select("-password")
+    .lean();
 
     if (user) {
         return replaceMongoIdInObject(user) as IUser;
@@ -32,4 +34,5 @@ export const getUserById = async (id : string) => {
         return null;
     }
 }
+
 

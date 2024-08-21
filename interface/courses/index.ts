@@ -70,6 +70,7 @@ export interface ITestimonial {
   user: IUser;
   courseId: ICourse;
   rating: number;
+  studentName?: string;
 }
 
 export interface IEnrollment {
