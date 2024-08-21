@@ -73,6 +73,8 @@ export interface ITestimonial {
 }
 
 export interface IEnrollment {
+  _id: string;
+  id: string;
   enrollment_date: Date;
   status: string;
   completion_date: Date;
@@ -89,4 +91,29 @@ export interface ILesson {
   published: boolean;
   slug: string;
   access: string;
+}
+
+
+export interface IAssessment{
+  assessments: IAssessments[];
+  otherMarks : number;
+}
+
+export interface IReport {
+  course : ICourse;
+  student : IUser;
+  totalCompletedLessons: ObjectId [];
+  totalCompletedModules: ObjectId [];
+  quizAssessment:  IAssessment;
+}
+
+
+export interface IAssessments{
+  quizId: ObjectId,
+  options: {
+    option: string,
+    isCorrect: boolean,
+    isSelected: boolean
+  } [],
+  attempted: boolean,
 }

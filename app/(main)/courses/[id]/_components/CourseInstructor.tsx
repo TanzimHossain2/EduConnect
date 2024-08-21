@@ -2,6 +2,7 @@ import { getCourseDetailsByInstructor } from "@/backend/services/courses/courses
 import { ICourse } from "@/interface/courses";
 import { MessageSquare, Presentation, Star, UsersRound } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link"; 
 
 interface Props {
   course: ICourse;
@@ -17,7 +18,7 @@ const CourseInstructor: React.FC<Props> = async ({ course }) => {
   return (
     <div className="bg-gray-50 rounded-md p-8">
       <div className="md:flex md:gap-x-5 mb-8">
-        <div className="h-[310px] w-[270px] max-w-full  flex-none rounded mb-5 md:mb-0">
+        <div className="h-[310px] w-[270px] max-w-full flex-none rounded mb-5 md:mb-0">
           <Image
             src={instructor?.profilePicture}
             width={270}
@@ -59,7 +60,12 @@ const CourseInstructor: React.FC<Props> = async ({ course }) => {
           </div>
         </div>
       </div>
-      <p className="text-gray-600">{instructor?.bio}</p>
+      <p className="text-gray-600 mb-6">{instructor?.bio}</p>
+
+      {/* Button to View Instructor Profile */}
+      <Link  className="inline-block bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700" href={`/instructor/${instructor._id.toString()}`}>
+          View Profile
+      </Link>
     </div>
   );
 };

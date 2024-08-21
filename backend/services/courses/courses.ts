@@ -1,12 +1,15 @@
 import { dbConnect } from "@/backend/db/connectDb";
 import { db } from "@/backend/model";
 import { ICourse } from "@/interface/courses";
+
+
 import {
   replaceMongoIdInArray,
   replaceMongoIdInObject,
 } from "@/utils/convertData";
 import { getEnrollmentsForCourse } from "./enrollments";
 import { getTestimonialsForCourse } from "./testimonials";
+import { Types } from "mongoose";
 
 export const getCourseList = async (): Promise<ICourse[]> => {
   try {
@@ -122,3 +125,17 @@ export const getCourseDetailsByInstructor = async (id: string) => {
     averageRating: averageRating.toPrecision(2),
   };
 };
+
+
+export const getInstructorCourses = async (id: string) => {
+  try {
+    const courses = await db.course.find({ instructor: id }).lean(); 
+
+    return replaceMongoIdInArray(courses) as ICourse[];
+    
+  } catch (err) {
+    console.error("Error fetching courses: ", err);
+    throw new Error("Failed to fetch courses");
+    
+  }
+} 

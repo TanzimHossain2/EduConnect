@@ -75,7 +75,6 @@ const SuccessPage: React.FC<SuccessParams> = async ({
 
     const emailSentResponse = await sendEmails(emailsToSend);
 
-    console.log("Emails sent: ", emailSentResponse);
   }
 
   return (
