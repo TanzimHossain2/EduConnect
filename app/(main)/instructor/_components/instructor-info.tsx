@@ -36,15 +36,15 @@ const InstructorInfo: React.FC<Props> = async ({ instructor }) => {
             <ul className=" items-center gap-3 flex-wrap text-sm text-gray-600 font-medium grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 md:grid-cols-4">
               <li className="flex items-center space-x-3">
                 <Presentation className="text-gray-600 w-4" />
-                <div>{CourseDetailsByInstructor?.courses}+ Courses</div>
+                <div>{CourseDetailsByInstructor?.courses.toString()}+ Courses</div>
               </li>
               <li className="flex items-center space-x-3">
                 <UsersRound className="text-gray-600 w-4" />
-                <div> {CourseDetailsByInstructor?.enrollments} Students</div>
+                <div> {CourseDetailsByInstructor?.enrollments.toString()} Students</div>
               </li>
               <li className="flex items-center space-x-3">
                 <MessageSquare className="text-gray-600 w-4" />
-                <div>{CourseDetailsByInstructor?.reviews} Reviews</div>
+                <div>{CourseDetailsByInstructor?.reviews.toString()} Reviews</div>
               </li>
               <li className="flex items-center space-x-3">
                 <Star className="text-gray-600 w-4" />

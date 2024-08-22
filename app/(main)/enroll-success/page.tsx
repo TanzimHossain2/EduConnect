@@ -56,8 +56,6 @@ const SuccessPage: React.FC<SuccessParams> = async ({
   if (paymentStatus === "succeeded") {
     //@ts-ignore
     const enrollmentResponse = await enrollForCourse(courseId,loggedInUser?.id,"stripe");
-    
-    console.log("Enrollment Response: ", enrollmentResponse);
 
     //send Emails to instructor and student and  person who enrolled
     const emailsToSend: EmailInfo[] = [

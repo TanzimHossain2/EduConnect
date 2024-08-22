@@ -69,7 +69,7 @@ export const ModulesForm = ({ initialData, courseId }) => {
   };
 
   const onReorder = async (updateData) => {
-    console.log({ updateData });
+    
     try {
       setIsUpdating(true);
 

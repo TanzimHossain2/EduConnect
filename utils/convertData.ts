@@ -10,20 +10,20 @@ interface WithId {
 export const replaceMongoIdInArray = (array: WithId[]): { id: string; [key: string]: any }[] => {
   return array.map(item => {
     return {
-      id: item._id.toString(),
+      id: item._id ? item._id.toString() : item.id,
       ...item
     };
   }).map(({ _id, ...rest }) => rest);
 };
 
 // Converts a single object with _id to an object with id
-export const replaceMongoIdInObject = (obj: WithId): { id: string; [key: string]: any } => {
-  const { _id, ...updatedObj } = { ...obj, id: obj._id.toString() };
+export const replaceMongoIdInObject = (obj: WithId): { id: string; [key: string]: any } | null => {
+  if (!obj) return null;
+  const { _id, ...updatedObj } = { ...obj, id: obj._id ? obj._id.toString() : obj.id };
   return updatedObj;
 };
 
-
-// Recursive function to replace _id with id in nested objects/arrays, including handling ObjectId instances
+// Recursive function to replace _id with id in nested objects/arrays, including handling ObjectId and Date instances
 const replaceMongoIdRecursively = (obj: any): any => {
   if (Array.isArray(obj)) {
     return obj.map(item => replaceMongoIdRecursively(item));
@@ -31,6 +31,9 @@ const replaceMongoIdRecursively = (obj: any): any => {
     if (obj instanceof ObjectId) {
       // If obj is directly an ObjectId, return its string representation
       return obj.toHexString();
+    } else if (obj instanceof Date) {
+      // If obj is a Date, return it as it is
+      return obj;
     }
 
     const { _id, ...rest } = obj;
@@ -52,11 +55,12 @@ const replaceMongoIdRecursively = (obj: any): any => {
 };
 
 // Converts an array of objects with _id to an array with id, handling nested levels and ObjectIds
-export const nestedReplaceMongoIdInArray = (array: WithId[]): { id: string; [key: string]: any }[] => {
+export const nestedReplaceMongoIdInArray = (array: any[]): { id: string; [key: string]: any }[] => {
   return array.map(item => replaceMongoIdRecursively(item));
 };
 
 // Converts a single object with _id to an object with id, handling nested levels and ObjectIds
-export const nestedReplaceMongoIdInObject = (obj: WithId): { id: string; [key: string]: any } => {
+export const nestedReplaceMongoIdInObject = (obj: any): { id: string; [key: string]: any } | null => {
+  if (!obj) return null;
   return replaceMongoIdRecursively(obj);
 };

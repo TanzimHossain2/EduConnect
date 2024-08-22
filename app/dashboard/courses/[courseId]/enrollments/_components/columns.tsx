@@ -2,22 +2,16 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { GraduationCap } from "lucide-react";
-import { ArrowUpDown, MoreHorizontal, Pencil } from "lucide-react";
-import Link from "next/link";
+import { formatMyDate } from "@/utils/date";
+import { Column, Row } from "@tanstack/react-table";
+import { ArrowUpDown, GraduationCap } from "lucide-react";
 
 export const columns = [
   {
     id: "name",
-    accessorKey: "student.name",
-    header: ({ column }) => {
+    accessorKey: "studentName",
+    header: ({ column }: { column: Column<any> } ) => {
       return (
         <Button
           variant="ghost"
@@ -29,8 +23,8 @@ export const columns = [
     },
   },
   {
-    accessorKey: "student.email",
-    header: ({ column }) => {
+    accessorKey: "studentEmail",
+    header: ({ column }: { column: Column<any> }) => {
       return (
         <Button
           variant="ghost"
@@ -42,8 +36,8 @@ export const columns = [
     },
   },
   {
-    accessorKey: "student.quizMark",
-    header: ({ column }) => {
+    accessorKey: "quizMark",
+    header: ({ column }: { column: Column<any> }) => {
       return (
         <Button
           variant="ghost"
@@ -55,8 +49,8 @@ export const columns = [
     },
   },
   {
-    accessorKey: "student.progress",
-    header: ({ column }) => {
+    accessorKey: "progress",
+    header: ({ column }: { column: Column<any> }) => {
       return (
         <Button
           variant="ghost"
@@ -66,10 +60,34 @@ export const columns = [
         </Button>
       );
     },
+
+    cell: ({ row }: { row: Row<any> }) => {
+      const progress = row.getValue("progress") as number;
+      return (
+        <div className="flex items-center">
+          <div className="w-20">
+            <Badge
+              variant="secondary"
+              className={cn(
+                progress < 25 ? "bg-red-300" :
+                progress < 50 ? "bg-yellow-300" :
+                progress < 75 ? "bg-green-300" :
+                "bg-blue-300"
+              )}
+            >
+          {progress} %
+            </Badge>
+          </div>
+          <div className="w-20">
+            <GraduationCap className="h-6 w-6" />
+          </div>
+        </div>
+      );
+    },
   },
   {
-    accessorKey: "date",
-    header: ({ column }) => {
+    accessorKey: "enrollment_date",
+    header: ({ column }: { column: Column<any> }) => {
       return (
         <Button
           variant="ghost"
@@ -79,35 +97,10 @@ export const columns = [
         </Button>
       );
     },
+    cell: ({row}: {row: Row<any>}) =>{
+      const enrollmentDate = row.getValue("enrollment_date") as Date;
+      return formatMyDate(enrollmentDate);
+    }
   },
-  // {
-  //   id: "actions",
-  //   cell: ({ row }) => {
-  //     const { id } = row.original;
-  //     return (
-  //       <DropdownMenu>
-  //         <DropdownMenuTrigger asChild>
-  //           <Button variant="ghost" className="h-4 w-8 p-0">
-  //             <span className="sr-only">Open Menu</span>
-  //             <MoreHorizontal className="h-4 w-4" />
-  //           </Button>
-  //         </DropdownMenuTrigger>
-  //         <DropdownMenuContent align="end">
-  //           <Link href={`/dashboard/courses/${id}`}>
-  //             <DropdownMenuItem className="cursor-pointer">
-  //               <Pencil className="h-4 w-4 mr-2" />
-  //               Edit
-  //             </DropdownMenuItem>
-  //           </Link>
-  //           <Link href={`/dashboard/courses/${id}/enrollments`}>
-  //             <DropdownMenuItem className="cursor-pointer">
-  //               <GraduationCap className="h-4 w-4 mr-2" />
-  //               View Enrollments
-  //             </DropdownMenuItem>
-  //           </Link>
-  //         </DropdownMenuContent>
-  //       </DropdownMenu>
-  //     );
-  //   },
-  // },
+  
 ];

@@ -28,6 +28,7 @@ const CourseModuleList: React.FC<Props> = ({ module }) => {
 
           <div className="space-y-3">
             {module?.lessonIds &&
+              module?.lessonIds.length > 0 &&
               module?.lessonIds.map((lessonId, index) => (
                 <CourseLessonList key={index} lessonId={lessonId} />
               ))}

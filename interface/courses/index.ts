@@ -82,6 +82,10 @@ export interface IEnrollment {
   method: string;
   course: ICourse;
   student: IUser;
+  studentName?: string;
+  studentEmail?: string;
+  progress?: number;
+  quizMark?: number;
 }
 
 export interface ILesson {

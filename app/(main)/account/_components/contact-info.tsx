@@ -106,7 +106,9 @@ const ContactInfo: React.FC<ContactInfoProps> = ({
           />
         </div>
 
-        {activeSocials.map((social) => (
+        {
+          activeSocials && activeSocials.length > 0 &&
+        activeSocials.map((social) => (
           <div key={social} className="flex items-center mb-4">
             <Label className="mb-2 block capitalize">{social}:</Label>
             <Input

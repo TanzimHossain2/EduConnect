@@ -13,7 +13,9 @@ function Menu() {
   const pathname = usePathname();
   return (
     <ul className="list-none sidebar-nav mb-0 mt-3" id="navmenu-nav">
-      {menu.map((item, i) => (
+      {
+       menu && menu.length > 0 &&
+      menu.map((item, i) => (
         <li className="navbar-item account-menu" key={i}>
           <Link
             href={item.href}

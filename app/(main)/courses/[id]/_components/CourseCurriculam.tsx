@@ -1,21 +1,6 @@
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { Accordion } from "@/components/ui/accordion";
 import { ICourse } from "@/interface/courses";
-import { cn } from "@/lib/utils";
-import {
-  BookCheck,
-  Clock10,
-  FileQuestion,
-  NotepadText,
-  Radio,
-  StickyNote,
-  Tv,
-  Video,
-} from "lucide-react";
+import { BookCheck, Clock10 } from "lucide-react";
 import CourseModuleList from "./module/CourseModuleList";
 
 interface Props {
@@ -52,10 +37,9 @@ const CourseCurriculam: React.FC<Props> = ({ course }) => {
         className="w-full"
       >
         {course?.modules &&
+        course?.modules.length > 0 &&
           course?.modules.map((module) => {
-            return (
-              <CourseModuleList key={module._id.toString()} module={module} />
-            );
+            return <CourseModuleList key={module.id} module={module} />;
           })}
       </Accordion>
     </>

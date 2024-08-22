@@ -15,6 +15,7 @@ const CourseOverview: React.FC<Props> = ({ course }) => {
         <h4 className="text-2xl">What You will Learn?</h4>
         <ul className="grid sm:grid-cols-2 grid-cols-1 gap-6">
           {course?.learning &&
+            course?.learning.length > 0 &&
             course?.learning.map((item, index) => (
               <li key={index} className="flex space-x-3">
                 <div className="flex-none relative top-1">

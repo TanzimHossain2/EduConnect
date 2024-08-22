@@ -12,7 +12,7 @@ const CourseInstructor: React.FC<Props> = async ({ course }) => {
   const instructor = course?.instructor;
   const instructorName = `${instructor?.firstName} ${instructor?.lastName}`;
   const CourseDetailsByInstructor = await getCourseDetailsByInstructor(
-    instructor._id.toString()
+    instructor.id
   );
 
   return (
@@ -38,17 +38,17 @@ const CourseInstructor: React.FC<Props> = async ({ course }) => {
             <ul className="list space-y-4">
               <li className="flex items-center space-x-3">
                 <Presentation className="text-gray-600" />
-                <div>{CourseDetailsByInstructor?.courses} + Courses</div>
+                <div>{CourseDetailsByInstructor?.courses.toString()} Courses</div>
               </li>
               <li className="flex space-x-3">
                 <UsersRound className="text-gray-600" />
                 <div>
-                  {CourseDetailsByInstructor?.enrollments} Student Learned
+                  {String(CourseDetailsByInstructor?.enrollments)} Student Learned
                 </div>
               </li>
               <li className="flex space-x-3">
                 <MessageSquare className="text-gray-600" />
-                <div>{CourseDetailsByInstructor?.reviews} Reviews</div>
+                <div>{CourseDetailsByInstructor?.reviews.toString()} Reviews</div>
               </li>
               <li className="flex space-x-3">
                 <Star className="text-gray-600" />
@@ -63,7 +63,7 @@ const CourseInstructor: React.FC<Props> = async ({ course }) => {
       <p className="text-gray-600 mb-6">{instructor?.bio}</p>
 
       {/* Button to View Instructor Profile */}
-      <Link  className="inline-block bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700" href={`/instructor/${instructor._id.toString()}`}>
+      <Link  className="inline-block bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700" href={`/instructor/${instructor.id}`}>
           View Profile
       </Link>
     </div>
