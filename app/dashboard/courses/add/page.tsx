@@ -1,9 +1,8 @@
 "use client";
+
 import * as z from "zod";
-// import axios from "axios";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
+import { CreateCourse } from "@/app/actions/course";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -13,18 +12,15 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import Link from "next/link";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+
+
 const formSchema = z.object({
   title: z.string().min(1, {
     message: "Title is required!",
@@ -33,6 +29,8 @@ const formSchema = z.object({
     message: "Description is required!",
   }),
 });
+
+type CourseData = z.infer<typeof formSchema>;
 
 const AddCourse = () => {
   const router = useRouter();
@@ -47,15 +45,22 @@ const AddCourse = () => {
 
   const { isSubmitting, isValid } = form.formState;
 
-  const onSubmit = async (values) => {
+  const onSubmit: (values: CourseData) => Promise<void> = async (values) => {
     try {
-      router.push(`/dashboard/courses/${1}`);
+      const res = await CreateCourse(values);
+
+      if (res.error) {
+        throw new Error(res.error);
+      }
+
+      router.push(`/dashboard/courses/${res?.course?._id}`);
       toast.success("Course created");
     } catch (error) {
       toast.error("Something went wrong");
     }
-    console.log(values);
   };
+
+
   return (
     <div className="max-w-5xl mx-auto flex md:items-center md:justify-center h-full p-6">
       <div className="max-w-full w-[536px]">
@@ -103,6 +108,7 @@ const AddCourse = () => {
                 </FormItem>
               )}
             />
+
             <div className="flex items-center gap-x-2">
               <Link href="/dashboard/courses">
                 <Button variant="outline" type="button">

@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
+import { UpdateCourse } from "@/app/actions/course";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -19,12 +20,19 @@ import { Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
- 
+
 const formSchema = z.object({
   price: z.coerce.number(),
 });
 
-export const PriceForm = ({ initialData, courseId }) => {
+interface PriceFormProps {
+  initialData: {
+    price: number;
+  };
+  courseId: string;
+}
+
+export const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
 
@@ -33,15 +41,22 @@ export const PriceForm = ({ initialData, courseId }) => {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      price: initialData?.price || undefined,
+      price: initialData?.price || 0,
     },
   });
 
   const { isSubmitting, isValid } = form.formState;
 
-  const onSubmit = async (values) => {
+  const onSubmit = async (values: Record<string, any>) => {
     try {
-      toast.success("Course updated");
+      const res = await UpdateCourse(courseId, values);
+
+      if (res.error) {
+        toast.error(res.error, { duration: 3000 });
+        return;
+      }
+
+      toast.success("Course updated", { duration: 2000 });
       toggleEdit();
       router.refresh();
     } catch (error) {

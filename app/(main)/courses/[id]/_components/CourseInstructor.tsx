@@ -1,4 +1,4 @@
-import { getCourseDetailsByInstructor } from "@/backend/services/courses/courses";
+import { getCourseDetailsByInstructor } from "@/backend/services/courses";
 import { ICourse } from "@/interface/courses";
 import { MessageSquare, Presentation, Star, UsersRound } from "lucide-react";
 import Image from "next/image";
@@ -6,7 +6,7 @@ import Link from "next/link";
 
 interface Props {
   course: ICourse;
-}
+} 
 
 const CourseInstructor: React.FC<Props> = async ({ course }) => {
   const instructor = course?.instructor;

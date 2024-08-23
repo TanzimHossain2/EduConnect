@@ -1,8 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-// import axios from "axios";
 import { ImageIcon, Pencil, PlusCircle } from "lucide-react";
 import Image from "next/image";
 import { toast } from "sonner";
@@ -18,21 +17,63 @@ const formSchema = z.object({
   }),
 });
 
-export const ImageForm = ({ initialData, courseId }) => {
+interface ImageFormProps {
+  initialData: {
+    imageUrl: string;
+  };
+  courseId: string;
+}
+
+export const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
   const router = useRouter();
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [file, setFile] = useState<any>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    if (file) {
+      const uploadFile = async () => {
+        try {
+          const formData = new FormData();
+          formData.append("files", file[0]);
+          formData.append("destination", `./public/assets/images/courses`);
+          formData.append("courseId", courseId);
+
+          const response = await fetch("/api/upload", {
+            method: "POST",
+            body: formData,
+          });
+
+          const result = await response.json();
+
+          if (isMounted) {
+            if (response.status === 200) {
+              initialData.imageUrl = `/assets/images/courses/${result.fileName}`;
+
+              toast.success(result.message);
+              toggleEdit();
+              router.refresh();
+            }
+          }
+        } catch (err: any) {
+          if (isMounted) {
+            console.log(err);
+            toast.error(err.message);
+          }
+        }
+      };
+
+      uploadFile();
+    }
+
+    return () => {
+      isMounted = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [file, courseId]);
 
   const toggleEdit = () => setIsEditing((current) => !current);
-
-  const onSubmit = async (values) => {
-    try {
-      toast.success("Course updated");
-      toggleEdit();
-      router.refresh();
-    } catch (error) {
-      toast.error("Something went wrong");
-    }
-  };
 
   return (
     <div className="mt-6 border bg-gray-50 rounded-md p-4">
@@ -65,13 +106,13 @@ export const ImageForm = ({ initialData, courseId }) => {
               alt="Upload"
               fill
               className="object-cover rounded-md"
-              src={initialData.imageUrl}
+              src={initialData.imageUrl ?? ""}
             />
           </div>
         ))}
       {isEditing && (
         <div>
-          <UploadDropzone />
+          <UploadDropzone onUpload={(file: any) => setFile(file)} />
           <div className="text-xs text-muted-foreground mt-4">
             16:9 aspect ratio recommended
           </div>

@@ -7,12 +7,10 @@ import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { toast } from "sonner";
 
-export const UploadDropzone = (props) => {
-  const { isMulti = false, label } = props;
+export const UploadDropzone = (props:any) => {
+  const { isMulti = false, label, onUpload } = props;
 
   const [droppedFiles, setDroppedFiles] = useState(null);
-
-  console.log(droppedFiles);
 
   const [isUploading, setIsUploading] = useState(false);
 
@@ -35,22 +33,18 @@ export const UploadDropzone = (props) => {
     return interval;
   };
 
-  const onDrop = useCallback(async (acceptedFiles) => {
+  const onDrop = useCallback(async (acceptedFile:any) => {
     // Do something with the files
 
     setIsUploading(true);
     const progressInterval = startSimulatedProgress();
 
-    setDroppedFiles(acceptedFiles);
+    setDroppedFiles(acceptedFile);
 
-    // await new Promise((resolve) => {
-    //   setTimeout(() => {
-    //     resolve('resolved');
-    //   }, 3000);
-    // });
+    onUpload(acceptedFile);
     setUploadProgress(100);
     clearInterval(progressInterval);
-  }, []);
+  }, [onUpload]);
 
   const { getRootProps, getInputProps, fileRejections } = useDropzone({
     onDrop,

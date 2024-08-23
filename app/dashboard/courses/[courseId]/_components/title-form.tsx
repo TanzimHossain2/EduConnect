@@ -1,10 +1,11 @@
 "use client";
 
-import * as z from "zod";
-// import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import * as z from "zod";
 
+import { UpdateCourse } from "@/app/actions/course";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -13,10 +14,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   title: z.string().min(1, {
@@ -24,7 +25,17 @@ const formSchema = z.object({
   }),
 });
 
-export const TitleForm = ({ initialData = {}, courseId }) => {
+interface TitleFormProps {
+  initialData: {
+    title: string;
+  };
+  courseId: string;
+}
+
+export const TitleForm = ({
+  initialData = { title: "" },
+  courseId,
+}: TitleFormProps) => {
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
 
@@ -37,12 +48,21 @@ export const TitleForm = ({ initialData = {}, courseId }) => {
 
   const { isSubmitting, isValid } = form.formState;
 
-  const onSubmit = async (values) => {
+  const onSubmit = async (values: Object) => {
     try {
-      //   await axios.patch(`/api/courses/${courseId}`, values);
+      const res = await UpdateCourse(courseId, values);
+
+      if (res.error) {
+        toast.error(res.error, { duration: 3000 });
+        return;
+      }
 
       toggleEdit();
       router.refresh();
+      toast.success("Course title updated successfully", {
+        duration: 2000,
+        icon: "😊",
+      });
     } catch (error) {
       toast.error("Something went wrong");
     }
@@ -63,6 +83,7 @@ export const TitleForm = ({ initialData = {}, courseId }) => {
           )}
         </Button>
       </div>
+
       {!isEditing && <p className="text-sm mt-2">{initialData.title}</p>}
       {isEditing && (
         <Form {...form}>

@@ -19,8 +19,19 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 
-export const Combobox = ({ options, value, onChange }) => {
-  const [open, setOpen] = React.useState(false);
+interface Option {
+  value: string;
+  label: string;
+}
+
+interface ComboboxProps {
+  options: Option[];
+  value: string;
+  onChange: (value: string) => void;
+}
+
+export const Combobox: React.FC<ComboboxProps> = ({ options, value, onChange }) => {
+  const [open, setOpen] = React.useState<boolean>(false);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>

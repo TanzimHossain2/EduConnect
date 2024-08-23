@@ -3,13 +3,13 @@ import mongoose, { Schema } from "mongoose";
 
 const courseSchema = new Schema<ICourse>({
   title: { type: String, required: true },
-  subtitle: { type: String, required: true },
+  subtitle: { type: String},
   description: { type: String, required: true },
-  price: { type: Number, required: true },
-  thumbnail: { type: String, required: true },
+  price: { type: Number, default: 0 },
+  thumbnail: { type: String },
   modules: [{ type: Schema.Types.ObjectId, ref: "Module" }],
   learning: [{ type: String }],
-  active: { type: Boolean, default: true },
+  active: { type: Boolean, default: false },
   category: { type: Schema.Types.ObjectId, ref: "Category" },
   instructor: { type: Schema.Types.ObjectId, ref: "User" },
   quizzes: { type: Schema.Types.ObjectId, ref: "Quiz" },

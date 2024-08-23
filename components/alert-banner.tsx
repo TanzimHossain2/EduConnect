@@ -17,12 +17,12 @@ const bannerVariants = cva(
   }
 );
 
-const iconMap = {
+const iconMap: { [key: string]: React.ComponentType<any> } = {
   warning: AlertTriangle,
   success: CheckCircleIcon,
 };
 
-const AlertBanner = ({ label, variant, className }) => {
+const AlertBanner = ({ label, variant, className }: { label: string, variant: "warning" | "success" | null | undefined, className: string }) => {
   const Icon = iconMap[variant || "warning"];
   return (
     <div className={cn(bannerVariants({ variant }), className)}>

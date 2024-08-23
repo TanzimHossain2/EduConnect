@@ -1,16 +1,16 @@
-
+import "server-only";
 
 import { auth } from "@/auth";
 import { getUserByEmail } from "@/backend/services/users";
 
-export const useLoggedInUser = async () => {
+export const getLoggedInUser = async () => {
   const session = await auth();
 
   if (!session?.user) {
     return null;
   }
 
-  const LoggedInUser = await getUserByEmail(session?.user?.email ?? "");
+  const loggedInUser = await getUserByEmail(session?.user?.email ?? "");
 
-  return LoggedInUser;
+  return loggedInUser;
 };

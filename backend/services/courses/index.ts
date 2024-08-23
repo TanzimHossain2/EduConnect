@@ -1,18 +1,17 @@
 import { getCategories, getCategoryDetails } from "./categories";
+import { getCourseDetailsByInstructor ,getInstructorCourses} from "./courseByInstructor";
 import {
   getCourseDetails,
-  getCourseDetailsByInstructor,
   getCourseList,
-  getInstructorCourses,
 } from "./courses";
+import { create } from "./createCourse";
 import { getEnrollmentsForCourse, getEnrollmentsForUser, hasEnrollmentForCourse } from "./enrollments";
 import { getLesson } from "./lessons";
 import { getAReport } from "./reports";
 import { getTestimonialsForCourse } from "./testimonials";
 
-
-
 export {
+  create,
   getCategories,
   getCategoryDetails,
   getCourseDetails,

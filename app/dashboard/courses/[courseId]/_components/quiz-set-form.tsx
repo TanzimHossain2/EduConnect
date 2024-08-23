@@ -86,7 +86,7 @@ export const QuizSetForm = ({
           {"No quiz set selected"}
         </p>
       )}
-      {console.log({ options })}
+   
       {isEditing && (
         <Form {...form}>
           <form
