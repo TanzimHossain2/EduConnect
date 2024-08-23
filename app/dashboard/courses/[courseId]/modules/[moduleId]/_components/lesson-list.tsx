@@ -1,21 +1,37 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import {
   DragDropContext,
-  Droppable,
   Draggable,
+  Droppable,
   DropResult,
 } from "@hello-pangea/dnd";
 import { Grip, Pencil } from "lucide-react";
+import { useEffect, useState } from "react";
 
-import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 import { CirclePlay } from "lucide-react";
 
-export const LessonList = ({ items, onReorder, onEdit }) => {
+interface Lesson {
+  id: string;
+  title: string;
+  active: boolean;
+}
+
+interface LessonListProps {
+  items: Lesson[];
+  onReorder: (updatedModules: { id: string; position: number }[]) => void;
+  onEdit: (id: string) => void;
+}
+
+export const LessonList: React.FC<LessonListProps> = ({
+  items,
+  onReorder,
+  onEdit,
+}) => {
   const [isMounted, setIsMounted] = useState(false);
-  const [modules, setModules] = useState(items);
+  const [modules, setModules] = useState<Lesson[]>(items);
 
   useEffect(() => {
     setIsMounted(true);
@@ -25,7 +41,7 @@ export const LessonList = ({ items, onReorder, onEdit }) => {
     setModules(items);
   }, [items]);
 
-  const onDragEnd = (result) => {
+  const onDragEnd = (result: DropResult) => {
     if (!result.destination) return;
 
     const items = Array.from(modules);
@@ -56,50 +72,55 @@ export const LessonList = ({ items, onReorder, onEdit }) => {
       <Droppable droppableId="modules">
         {(provided) => (
           <div {...provided.droppableProps} ref={provided.innerRef}>
-            {modules.map((module, index) => (
-              <Draggable key={module.id} draggableId={module.id} index={index}>
-                {(provided) => (
-                  <div
-                    className={cn(
-                      "flex items-center gap-x-2 bg-slate-200 border-slate-200 border text-slate-700 rounded-md mb-4 text-sm",
-                      module.isPublished &&
-                        "bg-sky-100 border-sky-200 text-sky-700"
-                    )}
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                  >
+            {modules &&
+              modules.length > 0 &&
+              modules.map((module, index) => (
+                <Draggable
+                  key={module.id}
+                  draggableId={module.id}
+                  index={index}
+                >
+                  {(provided) => (
                     <div
                       className={cn(
-                        "px-2 py-3 border-r border-r-slate-200 hover:bg-slate-300 rounded-l-md transition",
-                        module.isPublished &&
-                          "border-r-sky-200 hover:bg-sky-200"
+                        "flex items-center gap-x-2 bg-slate-200 border-slate-200 border text-slate-700 rounded-md mb-4 text-sm",
+                        module.active &&
+                          "bg-sky-100 border-sky-200 text-sky-700"
                       )}
-                      {...provided.dragHandleProps}
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
                     >
-                      <Grip className="h-5 w-5" />
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <CirclePlay size={18} />
-                      {module.title}
-                    </div>
-                    <div className="ml-auto pr-2 flex items-center gap-x-2">
-                      <Badge
+                      <div
                         className={cn(
-                          "bg-gray-500",
-                          module.isPublished && "bg-emerald-600"
+                          "px-2 py-3 border-r border-r-slate-200 hover:bg-slate-300 rounded-l-md transition",
+                          module.active && "border-r-sky-200 hover:bg-sky-200"
                         )}
+                        {...provided.dragHandleProps}
                       >
-                        {module.isPublished ? "Published" : "Draft"}
-                      </Badge>
-                      <Pencil
-                        onClick={() => onEdit(module.id)}
-                        className="w-4 h-4 cursor-pointer hover:opacity-75 transition"
-                      />
+                        <Grip className="h-5 w-5" />
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <CirclePlay size={18} />
+                        {module.title}
+                      </div>
+                      <div className="ml-auto pr-2 flex items-center gap-x-2">
+                        <Badge
+                          className={cn(
+                            "bg-gray-500",
+                            module.active && "bg-emerald-600"
+                          )}
+                        >
+                          {module.active ? "Published" : "Draft"}
+                        </Badge>
+                        <Pencil
+                          onClick={() => onEdit(module.id)}
+                          className="w-4 h-4 cursor-pointer hover:opacity-75 transition"
+                        />
+                      </div>
                     </div>
-                  </div>
-                )}
-              </Draggable>
-            ))}
+                  )}
+                </Draggable>
+              ))}
             {provided.placeholder}
           </div>
         )}

@@ -6,13 +6,14 @@ import {
 } from "./courses";
 import { create } from "./createCourse";
 import { getEnrollmentsForCourse, getEnrollmentsForUser, hasEnrollmentForCourse } from "./enrollments";
-import { getLesson } from "./lessons";
-import { createModule } from "./modules";
+import { createLesson, getLesson } from "./lessons";
+import { createModule, getModuleById } from "./modules";
 import { getAReport } from "./reports";
 import { getTestimonialsForCourse } from "./testimonials";
 
 export {
   create,
+  createLesson,
   createModule,
   getCategories,
   getCategoryDetails,
@@ -26,4 +27,5 @@ export {
   getAReport,
   hasEnrollmentForCourse,
   getInstructorCourses,
+  getModuleById,
 };

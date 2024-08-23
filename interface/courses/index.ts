@@ -94,9 +94,10 @@ export interface ILesson {
   description: string;
   duration: number;
   video_url: string;
-  published: boolean;
+  active: boolean;
   slug: string;
-  access: string;
+  access: "public" | "private";
+  order: number;
 }
 
 export interface IAssessment {

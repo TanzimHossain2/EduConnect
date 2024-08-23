@@ -17,12 +17,22 @@ import { Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import { updateModule } from "@/app/actions/module";
+import { getSlug } from "@/utils/slug";
 
 const formSchema = z.object({
   title: z.string().min(1),
 });
 
-export const ModuleTitleForm = ({ initialData, courseId, chapterId }) => {
+interface ModuleProps {
+  initialData: {
+    title: string;
+  };
+  courseId: string;
+  chapterId: string;
+}
+
+export const ModuleTitleForm : React.FC<ModuleProps> = ({ initialData, courseId, chapterId }) => {
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
 
@@ -35,13 +45,24 @@ export const ModuleTitleForm = ({ initialData, courseId, chapterId }) => {
 
   const { isSubmitting, isValid } = form.formState;
 
-  const onSubmit = async (values) => {
+  const onSubmit = async (values:any) => {
+
+    const slug = getSlug(values?.title);
+
+
     try {
+      values["slug"] = slug;
+      const res = await updateModule(chapterId, values);
+
+      if (res.error) {
+        throw new Error("Module not found");
+      }
+
       toast.success("Module title updated");
       toggleEdit();
       router.refresh();
-    } catch {
-      toast.error("Something went wrong");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Something went wrong");
     }
   };
 
@@ -60,7 +81,7 @@ export const ModuleTitleForm = ({ initialData, courseId, chapterId }) => {
           )}
         </Button>
       </div>
-      {!isEditing && <p className="text-sm mt-2">{"Reactive Accelerator"}</p>}
+      {!isEditing && <p className="text-sm mt-2">{ initialData.title}</p>}
       {isEditing && (
         <Form {...form}>
           <form

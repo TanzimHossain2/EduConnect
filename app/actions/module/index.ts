@@ -3,7 +3,6 @@
 import { db } from "@/backend/model";
 import { createModule } from "@/backend/services/courses";
 
-
 export const addModule = async (data: FormData) => {
   try {
     const title = data.get("title") as string;
@@ -44,20 +43,17 @@ export const addModule = async (data: FormData) => {
       module: resModule,
       code: 201,
     };
-
-
-    
   } catch (err) {
     return {
       error: err instanceof Error ? err.message : "Something went wrong",
       code: 500,
     };
-    
   }
 };
 
-
-export const reOrderModules = async (updateData: { id: string; position: number }[]) => {
+export const reOrderModules = async (
+  updateData: { id: string; position: number }[]
+) => {
   try {
     const promises = updateData.map(async ({ id, position }) => {
       const resModule = await db.module.findById(id);
@@ -66,7 +62,7 @@ export const reOrderModules = async (updateData: { id: string; position: number 
         return {
           error: "Module not found",
           code: 404,
-        }
+        };
       }
 
       resModule.order = position;
@@ -79,13 +75,35 @@ export const reOrderModules = async (updateData: { id: string; position: number 
       code: 200,
       message: "Modules reordered",
     };
-
-    
   } catch (err) {
     return {
       error: err instanceof Error ? err.message : "Something went wrong",
       code: 500,
-    }
-    
+    };
   }
-}
+};
+
+export const updateModule = async (moduleId: string, data: FormData) => {
+  try {
+    const res = await db.module.findByIdAndUpdate(moduleId, data, {
+      new: true,
+    });
+
+    if (!res) {
+      return {
+        error: "Module not found",
+        code: 404,
+      };
+    }
+
+    return {
+      message: "Module updated",
+      code: 200,
+    };
+  } catch (err) {
+    return {
+      error: err instanceof Error ? err.message : "Something went wrong",
+      code: 500,
+    };
+  }
+};

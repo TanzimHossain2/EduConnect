@@ -103,7 +103,7 @@ export const ModulesForm: React.FC<ModuleProps> = ({
   };
 
   const onEdit = (id: string) => {
-    router.push(`/dashboard/courses/1/modules/${1}`);
+    router.push(`/dashboard/courses/${courseId}/modules/${id}`);
   };
 
   return (

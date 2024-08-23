@@ -9,7 +9,7 @@ import { getTestimonialsForCourse } from "./testimonials";
 
 export const getInstructorCourses = async (id: string) => {
     try {
-      const courses = await db.course.find({ instructor: id }).lean();
+      const courses = await db.course.find({ instructor: id, active:true }).lean();
   
       return replaceMongoIdInArray(courses) as ICourse[];
     } catch (err) {

@@ -1,22 +1,28 @@
+import { getModuleById } from "@/backend/services/courses";
 import AlertBanner from "@/components/alert-banner";
 import { IconBadge } from "@/components/icon-badge";
-import {
-  ArrowLeft,
-  BookOpenCheck,
-  Eye,
-  LayoutDashboard,
-  Video,
-} from "lucide-react";
+import { ArrowLeft, BookOpenCheck, LayoutDashboard } from "lucide-react";
 import Link from "next/link";
-import { ModuleTitleForm } from "./_components/module-title-form";
-import { LessonForm } from "./_components/lesson-form";
+import { redirect } from "next/navigation";
 import { CourseActions } from "../../_components/course-action";
+import { LessonForm } from "./_components/lesson-form";
+import { ModuleTitleForm } from "./_components/module-title-form";
 
-const Module = async ({ params }) => {
+const Module = async ({ params }: any) => {
+  const { courseId, moduleId } = params;
+  const moduleData = await getModuleById(moduleId);
+
+  if (!moduleData) {
+    redirect(`/dashboard/courses/${courseId}`);
+  }
+
+  const lessons =
+    (moduleData?.lessonIds).sort((a: any, b: any) => a.order - b.order) || [];
+
   return (
     <>
       <AlertBanner
-      className="mb-6"
+        className="mb-6"
         label="This module is unpublished. It will not be visible in the course."
         variant="warning"
       />
@@ -25,7 +31,7 @@ const Module = async ({ params }) => {
         <div className="flex items-center justify-between">
           <div className="w-full">
             <Link
-              href={`/dashboard/courses/${1}`}
+              href={`/dashboard/courses/${courseId}`}
               className="flex items-center text-sm hover:opacity-75 transition mb-6"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
@@ -43,14 +49,20 @@ const Module = async ({ params }) => {
                 <IconBadge icon={LayoutDashboard} />
                 <h2 className="text-xl">Customize Your module</h2>
               </div>
-              <ModuleTitleForm initialData={{}} courseId={1} chapterId={1} />
+              <ModuleTitleForm
+                initialData={{
+                  title: moduleData?.title,
+                }}
+                courseId={courseId}
+                chapterId={moduleId}
+              />
             </div>
             <div>
               <div className="flex items-center gap-x-2">
                 <IconBadge icon={BookOpenCheck} />
                 <h2 className="text-xl">Module Lessons</h2>
               </div>
-              <LessonForm  />
+              <LessonForm initialData={lessons} moduleId={moduleId} />
             </div>
           </div>
           <div>

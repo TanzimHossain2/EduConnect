@@ -27,6 +27,7 @@ const moduleSchema = new Schema<IModule>(
     lessonIds: {
       required: true,
       type: [Schema.Types.ObjectId],
+      ref: "Lesson",
     },
     duration: {
       type: Number,
