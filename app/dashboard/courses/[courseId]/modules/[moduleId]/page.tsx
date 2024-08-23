@@ -16,6 +16,7 @@ const Module = async ({ params }) => {
   return (
     <>
       <AlertBanner
+      className="mb-6"
         label="This module is unpublished. It will not be visible in the course."
         variant="warning"
       />
@@ -49,7 +50,7 @@ const Module = async ({ params }) => {
                 <IconBadge icon={BookOpenCheck} />
                 <h2 className="text-xl">Module Lessons</h2>
               </div>
-              <LessonForm />
+              <LessonForm  />
             </div>
           </div>
           <div>

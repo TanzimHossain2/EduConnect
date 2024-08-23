@@ -10,6 +10,7 @@ import { ModulesForm } from "./_components/module-form";
 import { PriceForm } from "./_components/price-form";
 import { QuizSetForm } from "./_components/quiz-set-form";
 import { TitleForm } from "./_components/title-form";
+import { addModule } from "@/app/actions/module";
 
 interface Params {
   params: {
@@ -29,6 +30,8 @@ const EditCoursePage = async ({ params: { courseId } }: Params) => {
     };
   });
 
+  const modules =  course?.modules.sort((a, b) => a.order - b.order);
+  
   return (
     <>
       <AlertBanner
@@ -82,7 +85,7 @@ const EditCoursePage = async ({ params: { courseId } }: Params) => {
                 <h2 className="text-xl">Course Modules</h2>
               </div>
 
-              <ModulesForm initialData={[]} courseId={[]} />
+              <ModulesForm initialData={modules} courseId={ courseId } />
             </div>
             <div>
               <div className="flex items-center gap-x-2">

@@ -56,11 +56,12 @@ export interface IModule {
   id: string;
   title: string;
   description: string;
-  status: string;
+  active: boolean;
   slug: string;
-  course: string;
-  lessonIds: string[];
+  course: ICourse;
+  lessonIds: ObjectId[];
   duration: number;
+  order: number;
 }
 
 export interface ITestimonial {
@@ -98,27 +99,25 @@ export interface ILesson {
   access: string;
 }
 
-
-export interface IAssessment{
+export interface IAssessment {
   assessments: IAssessments[];
-  otherMarks : number;
+  otherMarks: number;
 }
 
 export interface IReport {
-  course : ICourse;
-  student : IUser;
-  totalCompletedLessons: ObjectId [];
-  totalCompletedModules: ObjectId [];
-  quizAssessment:  IAssessment;
+  course: ICourse;
+  student: IUser;
+  totalCompletedLessons: ObjectId[];
+  totalCompletedModules: ObjectId[];
+  quizAssessment: IAssessment;
 }
 
-
-export interface IAssessments{
-  quizId: ObjectId,
+export interface IAssessments {
+  quizId: ObjectId;
   options: {
-    option: string,
-    isCorrect: boolean,
-    isSelected: boolean
-  } [],
-  attempted: boolean,
+    option: string;
+    isCorrect: boolean;
+    isSelected: boolean;
+  }[];
+  attempted: boolean;
 }

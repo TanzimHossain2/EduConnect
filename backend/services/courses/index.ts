@@ -7,11 +7,13 @@ import {
 import { create } from "./createCourse";
 import { getEnrollmentsForCourse, getEnrollmentsForUser, hasEnrollmentForCourse } from "./enrollments";
 import { getLesson } from "./lessons";
+import { createModule } from "./modules";
 import { getAReport } from "./reports";
 import { getTestimonialsForCourse } from "./testimonials";
 
 export {
   create,
+  createModule,
   getCategories,
   getCategoryDetails,
   getCourseDetails,

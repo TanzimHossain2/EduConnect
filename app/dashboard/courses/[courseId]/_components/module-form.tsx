@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
+import { addModule, reOrderModules } from "@/app/actions/module";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -14,6 +15,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { getSlug } from "@/utils/slug";
 import { Loader2, PlusCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -23,22 +25,20 @@ import { ModuleList } from "./module-list";
 const formSchema = z.object({
   title: z.string().min(1),
 });
-const initialModules = [
-  {
-    id: "1",
-    title: "Module 1",
-    isPublished: true,
-  },
-  {
-    id: "2",
-    title: "Module 2",
-  },
-];
-export const ModulesForm = ({ initialData, courseId }) => {
-  const [modules, setModules] = useState(initialModules);
+
+interface ModuleProps {
+  initialData: any;
+  courseId: string;
+}
+
+export const ModulesForm: React.FC<ModuleProps> = ({
+  initialData,
+  courseId,
+}) => {
+  const [modules, setModules] = useState(initialData);
   const router = useRouter();
-  const [isCreating, setIsCreating] = useState(false);
-  const [isUpdating, setIsUpdating] = useState(false);
+  const [isCreating, setIsCreating] = useState<boolean>(false);
+  const [isUpdating, setIsUpdating] = useState<boolean>(false);
 
   const toggleCreating = () => setIsCreating((current) => !current);
 
@@ -51,26 +51,46 @@ export const ModulesForm = ({ initialData, courseId }) => {
 
   const { isSubmitting, isValid } = form.formState;
 
-  const onSubmit = async (values) => {
+  const onSubmit = async (values: any) => {
+    const slug = getSlug(values?.title);
+
+    if (!slug) {
+      toast.error("Invalid title");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("title", values?.title);
+    formData.append("slug", slug);
+
+    formData.append("courseId", courseId);
+    formData.append("order", modules.length);
+
+    const res = await addModule(formData);
+    console.log(res);
+
     try {
-      setModules((modules) => [
+      setModules((modules: any) => [
         ...modules,
         {
-          id: Date.now().toString(),
+          id: res.module._id.toString(),
           title: values.title,
         },
       ]);
       toast.success("Module created");
       toggleCreating();
       router.refresh();
+      form.reset();
     } catch (error) {
+      console.log(error);
+
       toast.error("Something went wrong");
     }
   };
 
-  const onReorder = async (updateData) => {
-    
+  const onReorder = async (updateData: any) => {
     try {
+      await reOrderModules(updateData);
       setIsUpdating(true);
 
       toast.success("Chapters reordered");
@@ -82,7 +102,7 @@ export const ModulesForm = ({ initialData, courseId }) => {
     }
   };
 
-  const onEdit = (id) => {
+  const onEdit = (id: string) => {
     router.push(`/dashboard/courses/1/modules/${1}`);
   };
 
@@ -142,7 +162,7 @@ export const ModulesForm = ({ initialData, courseId }) => {
             !modules?.length && "text-slate-500 italic"
           )}
         >
-          {!modules?.length && "No module"}
+          {modules && !modules?.length && "No module"}
           <ModuleList
             onEdit={onEdit}
             onReorder={onReorder}
