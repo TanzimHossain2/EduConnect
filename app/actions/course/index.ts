@@ -74,3 +74,72 @@ export const UpdateCourse = async (courseId: string, data: any) => {
     };
   }
 }
+
+export const changeCoursePublishState = async (courseId: string) => {
+  try {
+    const course = await db.course.findById(courseId); 
+    if (!course) {
+      return {
+        error: "Course not found",
+        code: 404,
+      };
+    }
+
+    course.active = !course.active;
+    await course.save(); 
+     
+    return {
+      message: "Course updated",
+      activeState: course.active,
+      code: 200,
+    };
+
+  } catch (err) {
+    return {
+      error: err instanceof Error ? err.message : "Something went wrong",
+      code: 500,
+    };
+  }
+
+}
+
+
+export const deleteCourse  = async (courseId: string) => {
+try {
+   // Find the course with its associated modules
+   const course = await db.course.findById(courseId).populate("modules");
+   
+   if (!course) {
+    return {
+      error: "Course not found",
+      code: 404,
+    };
+  }
+
+    // Loop through each module and delete its lessons
+    for (const moduleId of course.modules) {
+      const moduleData = await db.module.findById(moduleId);
+
+      if (moduleData) {
+        // Delete the module itself
+        await db.module.findByIdAndDelete(moduleId);
+      }
+    }
+
+    // Delete the course
+    await db.course.findByIdAndDelete(courseId);
+
+    return {
+      message: "Course and associated modules and lessons deleted",
+      code: 200,
+    };
+
+} catch (err) {
+  console.log("Error deleting course:", err);
+
+  return {
+    error: err instanceof Error ? err.message : "Something went wrong",
+    code: 500,
+  };
+}
+}

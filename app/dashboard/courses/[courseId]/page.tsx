@@ -10,7 +10,6 @@ import { ModulesForm } from "./_components/module-form";
 import { PriceForm } from "./_components/price-form";
 import { QuizSetForm } from "./_components/quiz-set-form";
 import { TitleForm } from "./_components/title-form";
-import { addModule } from "@/app/actions/module";
 
 interface Params {
   params: {
@@ -30,18 +29,21 @@ const EditCoursePage = async ({ params: { courseId } }: Params) => {
     };
   });
 
-  const modules =  course?.modules.sort((a, b) => a.order - b.order);
-  
+  const modules = course?.modules.sort((a, b) => a.order - b.order);
+
   return (
     <>
-      <AlertBanner
-        label="This course is unpublished. It will not be visible in the course."
-        variant="warning"
-        className=""
-      />
+      {!course?.active && (
+        <AlertBanner
+          label="This course is unpublished. It will not be visible in the course."
+          variant="warning"
+          className=""
+        />
+      )}
+
       <div className="p-6">
         <div className="flex items-center justify-end">
-          <CourseActions />
+          <CourseActions courseId={courseId} isActive={course?.active} />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
           <div>
@@ -64,17 +66,22 @@ const EditCoursePage = async ({ params: { courseId } }: Params) => {
                 description: course?.description,
               }}
               courseId={courseId}
-
             />
 
-            <ImageForm initialData={{
-              imageUrl: `/assets/images/courses/${course?.thumbnail}` || "",
-            }} courseId={courseId} />
+            <ImageForm
+              initialData={{
+                imageUrl: `/assets/images/courses/${course?.thumbnail}` || "",
+              }}
+              courseId={courseId}
+            />
 
-            
-            <CategoryForm initialData={{
-              value: course?.category?.title
-            }} courseId={courseId} options={mappedCategories} />
+            <CategoryForm
+              initialData={{
+                value: course?.category?.title,
+              }}
+              courseId={courseId}
+              options={mappedCategories}
+            />
 
             <QuizSetForm initialData={{}} courseId={courseId} />
           </div>
@@ -85,7 +92,7 @@ const EditCoursePage = async ({ params: { courseId } }: Params) => {
                 <h2 className="text-xl">Course Modules</h2>
               </div>
 
-              <ModulesForm initialData={modules} courseId={ courseId } />
+              <ModulesForm initialData={modules} courseId={courseId} />
             </div>
             <div>
               <div className="flex items-center gap-x-2">

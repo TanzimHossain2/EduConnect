@@ -2,6 +2,7 @@
 
 import { db } from "@/backend/model";
 import { createLesson } from "@/backend/services/courses";
+import mongoose from "mongoose";
 
 export const addLesson = async (data: FormData) => {
   try {
@@ -109,3 +110,61 @@ export const updateLesson = async (lessonId:string, data: any) => {
   }
 
 }
+
+
+export const ChangeLessonPublishState = async (lessonId: string) => {
+  try {
+    const lesson = await db.lesson.findById(lessonId); 
+    if (!lesson) {
+      return {
+        error: "Lesson not found",
+        code: 404,
+      };
+    }
+
+    lesson.active = !lesson.active;
+    await lesson.save();
+
+
+    return {
+      message: "Lesson updated",
+      activeState: lesson.active,
+      code: 200,
+    };
+
+  } catch (err) {
+    return {
+      error: err instanceof Error ? err.message : "Something went wrong",
+      code: 500,
+    };
+  }
+}
+
+
+// delete lesson
+export const deleteLesson = async (lessonId: string, moduleId:string) => {
+  try {
+    const moduleData = await db.module.findById(moduleId);
+
+    if (!moduleData) {
+      return {
+        error: "Module not found",
+        code: 404,
+      };
+    }
+
+    // @ts-ignore  // remove lesson from module
+    moduleData.lessonIds.pull(new mongoose.Types.ObjectId(lessonId));
+
+    await db.lesson.findByIdAndDelete(lessonId);
+
+    await moduleData.save();
+
+  } catch (err) {
+    return {
+      error: err instanceof Error ? err.message : "Something went wrong",
+      code: 500,
+    };
+    }
+  }
+

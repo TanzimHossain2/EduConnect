@@ -107,3 +107,49 @@ export const updateModule = async (moduleId: string, data: FormData) => {
     };
   }
 };
+
+
+export const changeModulePublishState = async (moduleId: string) => {
+  try {
+    const resModule = await db.module.findById(moduleId);
+
+    if (!resModule) {
+      return {
+        error: "Module not found",
+        code: 404,
+      };
+    }
+
+    resModule.active = !resModule.active;
+    await resModule.save();
+
+    return {
+      activeState: resModule.active,
+      code: 200,
+    };
+  } catch (err) {
+    return {
+      error: err instanceof Error ? err.message : "Something went wrong",
+      code: 500,
+    };
+  }
+}
+
+export const deleteModule = async (moduleId: string) => {
+  try {
+    await db.module.findByIdAndDelete(moduleId);
+
+    return {
+      message: "Module deleted",
+      code: 200,
+    };
+    
+  } catch (err) {
+    console.log(err);
+    
+    return {
+      error: err instanceof Error ? err.message : "Something went wrong",
+      code: 500,
+    };
+  }  
+};

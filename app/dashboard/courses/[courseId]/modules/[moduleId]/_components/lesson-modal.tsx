@@ -1,33 +1,40 @@
 import { IconBadge } from "@/components/icon-badge";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { LayoutDashboard } from "lucide-react";
-import { Eye } from "lucide-react";
-import { Video } from "lucide-react";
-import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
-import { LessonTitleForm } from "./lesson-title-form";
-import { LessonDescriptionForm } from "./lesson-description-form";
-import { LessonAccessForm } from "./lesson-access-form";
-import { VideoUrlForm } from "./video-url-form";
-import { CourseActions } from "../../../_components/course-action";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { ILesson } from "@/interface/courses";
+import { ArrowLeft, Eye, LayoutDashboard, Video } from "lucide-react";
+import Link from "next/link";
+import { LessonAccessForm } from "./lesson-access-form";
+import LessonActions from "./lesson-action";
+import { LessonDescriptionForm } from "./lesson-description-form";
+import { LessonTitleForm } from "./lesson-title-form";
+import { VideoUrlForm } from "./video-url-form";
 
 interface LessonModalProps {
   open: boolean;
   setOpen: (open: boolean) => void;
   courseId: string;
   lesson: ILesson;
+  moduleId: string;
+  onClose: () => void;
 }
 
+export const LessonModal = ({
+  open,
+  setOpen,
+  courseId,
+  lesson,
+  onClose,
+  moduleId
+}: LessonModalProps) => {
 
-export const LessonModal = ({ open, setOpen, courseId, lesson }:LessonModalProps) => {
+  const lessonDelete = async () => {
+    setOpen(false);
+
+    onClose();
+
+  };
+
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       {/* <DialogTrigger>Open</DialogTrigger> */}
@@ -48,7 +55,7 @@ export const LessonModal = ({ open, setOpen, courseId, lesson }:LessonModalProps
                 Back to course setup
               </Link>
               <div className="flex items-center justify-end">
-                <CourseActions />
+                <LessonActions lesson={lesson} moduleId={moduleId} onDelete={lessonDelete}  />
               </div>
             </div>
           </div>
@@ -61,13 +68,13 @@ export const LessonModal = ({ open, setOpen, courseId, lesson }:LessonModalProps
                 </div>
 
                 <LessonTitleForm
-                  initialData={{title: lesson.title}}
+                  initialData={{ title: lesson.title }}
                   courseId={courseId}
                   lessonId={lesson.id}
                 />
 
                 <LessonDescriptionForm
-                  initialData={{description: lesson.description}}
+                  initialData={{ description: lesson.description }}
                   courseId={courseId}
                   lessonId={lesson.id}
                 />

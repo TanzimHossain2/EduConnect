@@ -197,6 +197,10 @@ export const LessonForm = ({
           setOpen={setIsEditing}
           courseId={courseId}
           lesson={lessonToEdit}
+          moduleId={moduleId}
+          onClose={()=> {
+            window.location.reload();
+          }}
         />
       )}
     </div>
