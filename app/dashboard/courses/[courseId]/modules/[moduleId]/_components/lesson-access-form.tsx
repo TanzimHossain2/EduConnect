@@ -18,33 +18,62 @@ import { Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import { updateLesson } from "@/app/actions/lession";
 
 const formSchema = z.object({
   isFree: z.boolean().default(false),
 });
 
-export const LessonAccessForm = ({ initialData, courseId, lessonId }) => {
+interface LessonAccessProps {
+  initialData: {
+    isFree: boolean;
+  };
+  courseId: string;
+  lessonId: string;
+}
+
+export const LessonAccessForm = ({ initialData, courseId, lessonId }:LessonAccessProps) => {
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
+  const [free, setFree] = useState(initialData?.isFree);
 
   const toggleEdit = () => setIsEditing((current) => !current);
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      isFree: !!initialData.isFree,
+      isFree: !!free,
     },
   });
 
   const { isSubmitting, isValid } = form.formState;
 
-  const onSubmit = async (values) => {
+  const onSubmit = async (values: { isFree: boolean }) => {
+  
     try {
+      const payload: { access:  "public" | "private" } = {
+        access: "private"
+      };
+      
+      if (values.isFree){
+        payload["access"] = "public";
+      } else {
+        payload["access"] = "private";
+      }
+
+
+      const res = await updateLesson(lessonId, payload);
+
+      if (res.error){
+        throw new Error(res.error);
+      }
+
       toast.success("Lesson updated");
       toggleEdit();
+      setFree(!free);
       router.refresh();
     } catch (error) {
-      toast.error("Something went wrong");
+      toast.error(error instanceof Error ? error.message : "An error occurred");
     }
   };
 
@@ -67,10 +96,10 @@ export const LessonAccessForm = ({ initialData, courseId, lessonId }) => {
         <p
           className={cn(
             "text-sm mt-2",
-            !initialData.isFree && "text-slate-500 italic"
+            !free && "text-slate-500 italic"
           )}
         >
-          {initialData.isFree ? (
+          {free ? (
             <>This chapter is free for preview</>
           ) : (
             <>This chapter is not free</>

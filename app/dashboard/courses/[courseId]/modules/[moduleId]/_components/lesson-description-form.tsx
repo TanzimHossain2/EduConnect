@@ -19,14 +19,24 @@ import { Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import { updateLesson } from "@/app/actions/lession";
 
 const formSchema = z.object({
   description: z.string().min(1),
 });
 
-export const LessonDescriptionForm = ({ initialData, courseId, lessonId }) => {
+interface LessonDescriptionFormProps {
+  initialData: {
+    description: string;
+  };
+  courseId: string;
+  lessonId: string;
+}
+
+export const LessonDescriptionForm = ({ initialData, courseId, lessonId }:LessonDescriptionFormProps) => {
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
+ const [description, setDescription] = useState(initialData?.description || "");
 
   const toggleEdit = () => setIsEditing((current) => !current);
 
@@ -39,10 +49,24 @@ export const LessonDescriptionForm = ({ initialData, courseId, lessonId }) => {
 
   const { isSubmitting, isValid } = form.formState;
 
-  const onSubmit = async (values) => {
+  const onSubmit = async (values:any) => {
+    console.log(values);
+    
     try {
-      toast.success("Lesson updated");
+      const res = await updateLesson( lessonId, { description: values.description });
+
+      if(res.error){
+        return toast.error("Something went wrong");
+         
+      }
+
+
+      toast.success("Lesson updated", { duration: 3000 });
+      setDescription(values.description);
+      router.refresh();
       toggleEdit();
+
+
       router.refresh();
     } catch (error) {
       toast.error("Something went wrong");
@@ -68,12 +92,12 @@ export const LessonDescriptionForm = ({ initialData, courseId, lessonId }) => {
         <div
           className={cn(
             "text-sm mt-2",
-            !initialData.description && "text-slate-500 italic"
+            !description && "text-slate-500 italic"
           )}
         >
-          {!initialData.description && "No description"}
-          {initialData.description && (
-            <Preview value={initialData.description} />
+          {!description && "No description"}
+          {description && (
+            <Preview value={description} />
           )}
         </div>
       )}

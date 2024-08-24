@@ -90,6 +90,7 @@ export interface IEnrollment {
 }
 
 export interface ILesson {
+  id: string;
   title: string;
   description: string;
   duration: number;

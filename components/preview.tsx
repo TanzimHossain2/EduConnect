@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import dynamic from "next/dynamic";
 import "react-quill/dist/quill.bubble.css";
 
-export const Preview = ({ value }) => {
+export const Preview = ({ value }: { value: any }) => {
   const ReactQuill = useMemo(
     () => dynamic(() => import("react-quill"), { ssr: false }),
     []

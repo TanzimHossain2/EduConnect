@@ -82,3 +82,30 @@ export const reOrderLessons = async (
     };
   }
 };
+
+export const updateLesson = async (lessonId:string, data: any) => {
+
+  try {
+    const lesson = await db.lesson.findByIdAndUpdate (lessonId, data, { new: true });
+
+    if (!lesson) {
+      return {
+        error: "Lesson not found",
+        code: 404,
+      };
+    }
+
+    return {
+      message: "Lesson updated",
+      code: 200,
+    };
+    
+  } catch (err) {
+    return {
+      error: err instanceof Error ? err.message : "Something went wrong",
+      code: 500,
+    };
+    
+  }
+
+}

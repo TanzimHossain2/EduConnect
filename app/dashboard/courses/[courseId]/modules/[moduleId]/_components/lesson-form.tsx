@@ -14,6 +14,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { ILesson } from "@/interface/courses";
 import { cn } from "@/lib/utils";
 import { getSlug } from "@/utils/slug";
 import { Loader2, PlusCircle } from "lucide-react";
@@ -30,14 +31,20 @@ const formSchema = z.object({
 interface LessonFormProps {
   initialData: any;
   moduleId: string;
+  courseId: string;
 }
 
-export const LessonForm = ({ initialData, moduleId }: LessonFormProps) => {
+export const LessonForm = ({
+  initialData,
+  moduleId,
+  courseId,
+}: LessonFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [lessons, setLessons] = useState(initialData);
   const router = useRouter();
   const [isCreating, setIsCreating] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [lessonToEdit, setLessonToEdit] = useState<ILesson | null>(null);
 
   const toggleCreating = () => setIsCreating((current) => !current);
   const toggleEditing = () => setIsEditing((current) => !current);
@@ -107,6 +114,10 @@ export const LessonForm = ({ initialData, moduleId }: LessonFormProps) => {
   };
 
   const onEdit = (id: string) => {
+    const foundLesson = lessons.find((lesson: ILesson) => lesson.id === id);
+
+    setLessonToEdit(foundLesson);
+
     setIsEditing(true);
   };
 
@@ -179,7 +190,15 @@ export const LessonForm = ({ initialData, moduleId }: LessonFormProps) => {
           Drag & Drop to reorder the lessons
         </p>
       )}
-      <LessonModal open={isEditing} setOpen={setIsEditing} />
+
+      {lessonToEdit && (
+        <LessonModal
+          open={isEditing}
+          setOpen={setIsEditing}
+          courseId={courseId}
+          lesson={lessonToEdit}
+        />
+      )}
     </div>
   );
 };

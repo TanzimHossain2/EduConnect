@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
+import { updateLesson } from "@/app/actions/lession";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -17,14 +18,29 @@ import { Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import { getSlug } from "@/utils/slug";
 
 const formSchema = z.object({
   title: z.string().min(1),
 });
 
-export const LessonTitleForm = ({ initialData, courseId, lessonId }) => {
+interface LessonTitleFormProps {
+  initialData: {
+    title: string;
+  };
+  courseId: string;
+  lessonId: string;
+}
+
+export const LessonTitleForm = ({
+  initialData,
+  courseId,
+  lessonId,
+}: LessonTitleFormProps) => {
   const router = useRouter();
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [title, setTitle] = useState<string>(initialData?.title);
+ 
 
   const toggleEdit = () => setIsEditing((current) => !current);
 
@@ -35,13 +51,28 @@ export const LessonTitleForm = ({ initialData, courseId, lessonId }) => {
 
   const { isSubmitting, isValid } = form.formState;
 
-  const onSubmit = async (values) => {
+
+  const onSubmit = async (values: any) => {
+
     try {
-      toast.success("Lesson updated");
+
+      const slug = getSlug(values?.title);
+      values.slug = slug;
+
+      const res = await updateLesson(lessonId, values);
+
+      if (!res) {
+        toast.error("Lesson not found");
+        return;
+      }
+
+      setTitle(values?.title);
+
+      toast.success("Lesson updated", { duration: 2000 });
       toggleEdit();
       router.refresh();
-    } catch {
-      toast.error("Something went wrong");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Something went wrong");
     }
   };
 
@@ -61,7 +92,7 @@ export const LessonTitleForm = ({ initialData, courseId, lessonId }) => {
         </Button>
       </div>
       {!isEditing && (
-        <p className="text-sm mt-2">{"Introduction to React.js"}</p>
+        <p className="text-sm mt-2">{title}</p>
       )}
       {isEditing && (
         <Form {...form}>
