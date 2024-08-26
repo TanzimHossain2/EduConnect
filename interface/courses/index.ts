@@ -1,4 +1,4 @@
-import { ObjectId } from "mongoose";
+import { ObjectId, Document } from "mongoose";
 
 export interface ICourse {
   id: string;
@@ -12,7 +12,7 @@ export interface ICourse {
   active: boolean;
   category: ICategory;
   instructor: IUser;
-  quizzes: ObjectId;
+  quizSet: ObjectId | null;
   testimonials: ITestimonial[];
   createdOn: Date;
   modifiedOn: Date;
@@ -123,3 +123,28 @@ export interface IAssessments {
   }[];
   attempted: boolean;
 }
+
+export interface IQuizSet{
+  id: string;
+  title: string;
+  description: string;
+  slug: string;
+  active: boolean;
+  quizIds: IQuiz[];
+}
+
+
+export interface IQuiz extends Document {
+  id: string;
+  title: string;
+  description: string;
+  explanations: string;
+  slug: string;
+  marks: number;
+  options: {
+    text: string;
+    is_correct: boolean;
+  }[];
+  }
+  
+

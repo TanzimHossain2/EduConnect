@@ -17,6 +17,9 @@ import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { updateQuizSet } from "@/app/actions/quiz";
+import { getSlug } from "@/utils/slug";
 
 const formSchema = z.object({
   title: z.string().min(1, {
@@ -24,7 +27,14 @@ const formSchema = z.object({
   }),
 });
 
-export const TitleForm = ({ initialData = {} }) => {
+interface TitleFormProps {
+  initialData: {
+    title: string;
+  };
+  quizSetId: string;
+}
+
+export const TitleForm = ({ initialData ,quizSetId}:TitleFormProps) => {
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
 
@@ -32,14 +42,26 @@ export const TitleForm = ({ initialData = {} }) => {
 
   const form = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: initialData,
+    defaultValues: initialData || {},
   });
 
   const { isSubmitting, isValid } = form.formState;
 
-  const onSubmit = async (values) => {
+  const onSubmit = async (values:any) => {
     try {
+      const slug = getSlug(values?.title);
+      values["slug"] = slug;
+    const res =  await updateQuizSet(quizSetId, values);
+
+      if (res.code !== 200) {
+        toast.error(res.error);
+        return;
+      }
+
       toggleEdit();
+
+      toast.success("Quiz set Title updated",{duration: 3000});
+
       router.refresh();
     } catch (error) {
       toast.error("Something went wrong");

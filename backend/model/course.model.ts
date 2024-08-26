@@ -12,7 +12,7 @@ const courseSchema = new Schema<ICourse>({
   active: { type: Boolean, default: false },
   category: { type: Schema.Types.ObjectId, ref: "Category" },
   instructor: { type: Schema.Types.ObjectId, ref: "User" },
-  quizzes: { type: Schema.Types.ObjectId, ref: "Quiz" },
+  quizSet: { type: Schema.Types.ObjectId, ref: "Quiz", default: null },
   testimonials: [{ type: Schema.Types.ObjectId, ref: "Testimonial" }],
 },{ timestamps: true });
 
@@ -24,3 +24,4 @@ const CourseModel: mongoose.Model<ICourse> =
   mongoose.models.Course || mongoose.model("Course", courseSchema);
 
 export default CourseModel;
+ 

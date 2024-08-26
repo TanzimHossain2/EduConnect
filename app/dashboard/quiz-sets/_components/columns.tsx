@@ -9,13 +9,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import { Column, Row } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal, Pencil } from "lucide-react";
 import Link from "next/link";
+
 
 export const columns = [
   {
     accessorKey: "title",
-    header: ({ column }) => {
+    header: ({ column }:{column: Column<any>}) => {
       return (
         <Button
           variant="ghost"
@@ -28,7 +30,7 @@ export const columns = [
   },
   {
     accessorKey: "totalQuiz",
-    header: ({ column }) => {
+    header: ({ column }: { column: Column<any> }) => {
       return (
         <Button
           variant="ghost"
@@ -41,7 +43,7 @@ export const columns = [
   },
   {
     accessorKey: "isPublished",
-    header: ({ column }) => {
+    header: ({ column }: { column: Column<any> }) => {
       return (
         <Button
           variant="ghost"
@@ -51,7 +53,7 @@ export const columns = [
         </Button>
       );
     },
-    cell: ({ row }) => {
+    cell: ({ row }: { row: Row<any> }) => {
       const isPublished = row.getValue("isPublished") || false;
 
       return (
@@ -63,7 +65,7 @@ export const columns = [
   },
   {
     id: "actions",
-    cell: ({ row }) => {
+    cell: ({ row }: { row: Row<any> }) => {
       const { id } = row.original;
       return (
         <DropdownMenu>

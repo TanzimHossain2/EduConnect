@@ -4,6 +4,8 @@ import CourseModel from "./course.model";
 import EnrollmentModel from "./enrollment.model";
 import LessonModel from "./lession.model";
 import ModuleModel from "./module.model";
+import QuizSetModel from "./quizset.model";
+import QuizModel from "./quizzes.model";
 import ReportModel from "./report.model";
 import TestimonialModel from "./testimonial.model";
 import UserModel from "./user.model";
@@ -18,4 +20,6 @@ export const db = {
   lesson: LessonModel,
   report: ReportModel,
   assessment: AssessmentModel,
+  quizSet: QuizSetModel,
+  quiz: QuizModel
 };

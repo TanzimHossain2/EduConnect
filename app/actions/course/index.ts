@@ -3,6 +3,7 @@
 import { db } from "@/backend/model";
 import { create } from "@/backend/services/courses";
 import { getLoggedInUser } from "@/lib/loggedin-user";
+import mongoose, { ObjectId } from "mongoose";
 import z from "zod";
 
 const formSchema = z.object({
@@ -142,4 +143,34 @@ try {
     code: 500,
   };
 }
+}
+
+
+export const updateQuizSetForCourse = async (courseId: string, dataToUpdate:any) => {
+  try {
+    const data: { quizSet?: any } = {};
+    data["quizSet"] = new mongoose.Types.ObjectId(dataToUpdate.quizSetId);
+
+    const res = await db.course.findByIdAndUpdate(courseId, data, {
+      new: true,
+    }).lean();
+
+    if (!res) {
+      return {
+        error: "Course not found",
+        code: 404,
+      };
+    }
+
+    return {
+      message: "Course updated successfully",
+      code: 200,
+    };
+
+  } catch (err) {
+    return {
+      error: err instanceof Error ? err.message : "Something went wrong",
+      code: 500,
+    };
+  }
 }

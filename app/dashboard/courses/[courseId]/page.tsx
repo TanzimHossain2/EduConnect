@@ -10,6 +10,7 @@ import { ModulesForm } from "./_components/module-form";
 import { PriceForm } from "./_components/price-form";
 import { QuizSetForm } from "./_components/quiz-set-form";
 import { TitleForm } from "./_components/title-form";
+import { getAllQuizSets } from "@/backend/services/quiz";
 
 interface Params {
   params: {
@@ -30,6 +31,20 @@ const EditCoursePage = async ({ params: { courseId } }: Params) => {
   });
 
   const modules = course?.modules.sort((a, b) => a.order - b.order);
+  const allQuizSet = await getAllQuizSets(true);
+  let mappedQuizSet: any[] = [];
+
+  if (allQuizSet && allQuizSet.length > 0) {
+    mappedQuizSet= allQuizSet.map(quizSet=>{
+      return {
+        value: quizSet.id,
+        label: quizSet.title,
+      }
+    })
+  }
+  
+  
+
 
   return (
     <>
@@ -83,7 +98,10 @@ const EditCoursePage = async ({ params: { courseId } }: Params) => {
               options={mappedCategories}
             />
 
-            <QuizSetForm initialData={{}} courseId={courseId} />
+            <QuizSetForm initialData={{
+              quizSetId: course?.quizSet?.toString() || "",
+            }} courseId={courseId} options={mappedQuizSet} />
+
           </div>
           <div className="space-y-6">
             <div>

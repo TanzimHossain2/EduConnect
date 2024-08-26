@@ -1,11 +1,13 @@
 "use client";
 
-import * as z from "zod";
-// import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import * as z from "zod";
 
+import { addQuizToQuizSet, updateQuizInQuizSet } from "@/app/actions/quiz";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -15,13 +17,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Pencil } from "lucide-react";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { PlusCircle } from "lucide-react";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
+import useQuiz from "@/hooks/use-quiz";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const formSchema = z.object({
   title: z
@@ -80,74 +79,104 @@ const formSchema = z.object({
   }),
 });
 
-export const AddQuizForm = ({ setQuizes }) => {
+const defaultValues = {
+  title: "",
+  description: "",
+  optionA: {
+    label: "",
+    isTrue: false,
+  },
+  optionB: {
+    label: "",
+    isTrue: false,
+  },
+  optionC: {
+    label: "",
+    isTrue: false,
+  },
+  optionD: {
+    label: "",
+    isTrue: false,
+  },
+};
+
+export const AddQuizForm = ({ quizSetId }: { quizSetId: string }) => {
   const router = useRouter();
+  const [quizzes, setQuizzes] = useState([]);
+  const { quizData, setQuizData, restQuizData } = useQuiz();
+  const isEditing = !!quizData;
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     mode: "all",
-    defaultValues: {
-      title: "",
-      description: "",
-      optionA: {
-        label: "",
-        isTrue: false,
-      },
-      optionB: {
-        label: "",
-        isTrue: false,
-      },
-      optionC: {
-        label: "",
-        isTrue: false,
-      },
-      optionD: {
-        label: "",
-        isTrue: false,
-      },
-    },
+    defaultValues: defaultValues,
   });
 
   const { isSubmitting, isValid, errors } = form.formState;
-  console.log(errors);
 
-  const onSubmit = async (values) => {
-    try {
-      console.log({ values });
-
-      const structuredQuiz = {
-        id: Date.now(),
-        title: values.title,
-        options: [
-          values.optionA,
-          values.optionB,
-          values.optionC,
-          values.optionD,
-        ],
-      };
-      setQuizes((prevQuizes) => [...prevQuizes, structuredQuiz]);
+  // Populate form with quiz data if editing
+  useEffect(() => {
+    if (isEditing && quizData) {
       form.reset({
-        title: "",
-        description: "",
+        title: quizData.title,
+        description: quizData.description,
         optionA: {
-          label: "",
-          isTrue: false,
+          label: quizData.options[0].label,
+          isTrue: quizData.options[0].isTrue,
         },
         optionB: {
-          label: "",
-          isTrue: false,
+          label: quizData.options[1].label,
+          isTrue: quizData.options[1].isTrue,
         },
         optionC: {
-          label: "",
-          isTrue: false,
+          label: quizData.options[2].label,
+          isTrue: quizData.options[2].isTrue,
         },
         optionD: {
-          label: "",
-          isTrue: false,
+          label: quizData.options[3].label,
+          isTrue: quizData.options[3].isTrue,
         },
       });
-      toggleEdit();
+    }
+  }, [isEditing, quizData, form]);
+
+  const onSubmit = async (values: any) => {
+    try {
+      const correctNessAns = [
+        values.optionA.isTrue,
+        values.optionB.isTrue,
+        values.optionC.isTrue,
+        values.optionD.isTrue,
+      ];
+
+      const correctMarked = correctNessAns.filter((ans) => ans === true);
+      const isOneCorrect = correctMarked.length >= 1 ? true : false;
+
+      if (!isOneCorrect) {
+        toast.error("AtLeast one correct answer is required");
+        return;
+      }
+
+      const res = isEditing
+        ? await updateQuizInQuizSet(quizData.id, values)
+        : await addQuizToQuizSet(quizSetId, values);
+
+      if (res.code !== 200) {
+        toast.error("Something went wrong");
+        return;
+      }
+
+      isEditing
+        ? toast.success("Quiz updated successfully")
+        : toast.success("Quiz added successfully");
+
+      if (isEditing) {
+        restQuizData();
+        setQuizData(null);
+      }
+
       router.refresh();
+      form.reset(defaultValues);
     } catch (error) {
       toast.error("Something went wrong");
     }
@@ -367,7 +396,7 @@ export const AddQuizForm = ({ setQuizes }) => {
             {/* --------------- OPTION D ENDS -------- */}
             <div className="flex items-center justify-end gap-x-2">
               <Button disabled={isSubmitting} type="submit">
-                Save
+                {isEditing ? "Update Quiz" : "Add Quiz"}
               </Button>
             </div>
           </form>

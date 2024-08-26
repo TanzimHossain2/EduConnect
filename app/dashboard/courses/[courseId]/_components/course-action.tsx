@@ -31,10 +31,10 @@ export const CourseActions = ({ courseId, isActive }: CourseActionsProps) => {
           setPublished(res.activeState || false);
           toast.success("Course publish state updated", { duration: 2000 });
           router.refresh();
-
           break;
         }
         case "delete": {
+
           if (published) {
             toast.error(
               "Cannot delete a published course, please unPublish first"

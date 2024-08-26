@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
+import { updateQuizSetForCourse } from "@/app/actions/course";
 import { Button } from "@/components/ui/button";
 import { Combobox } from "@/components/ui/combobox";
 import {
@@ -23,24 +24,27 @@ const formSchema = z.object({
   quizSetId: z.string().min(1),
 });
 
-export const QuizSetForm = ({
+interface QuizSetFormProps {
+  initialData: {
+    quizSetId: string;
+  };
+  courseId: string;
+  options: any[];
+}
+
+export const QuizSetForm: React.FC<QuizSetFormProps> = ({
   initialData,
   courseId,
-  options = [
-    {
-      value: "quiz_set_1",
-      label: "Quiz Set 1",
-    },
-    {
-      value: "2",
-      label: "Quiz Set 2",
-    },
-  ],
+  options,
 }) => {
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
 
   const toggleEdit = () => setIsEditing((current) => !current);
+
+  const foundMatch = options.find(
+    (option) => option.value === initialData.quizSetId
+  );
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -51,13 +55,20 @@ export const QuizSetForm = ({
 
   const { isSubmitting, isValid } = form.formState;
 
-  const onSubmit = async (values) => {
+  const onSubmit = async (values: any) => {
     try {
-      toast.success("Course updated");
+      const res = await updateQuizSetForCourse(courseId, values);
+
+      if (res.code !== 200) {
+        toast.error(res.error);
+        return;
+      }
+
+      toast.success("Course Quiz Set updated successfully");
       toggleEdit();
       router.refresh();
-    } catch (error) {
-      toast.error("Something went wrong");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Something went wrong");
     }
   };
 
@@ -83,10 +94,10 @@ export const QuizSetForm = ({
             !initialData.quizSetId && "text-slate-500 italic"
           )}
         >
-          {"No quiz set selected"}
+          {foundMatch ? foundMatch.label : "No quiz set selected yet"}
         </p>
       )}
-   
+
       {isEditing && (
         <Form {...form}>
           <form

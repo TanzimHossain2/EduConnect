@@ -25,9 +25,9 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { PlusCircle } from "lucide-react";
 
-export function DataTable({ columns, data }) {
-  const [sorting, setSorting] = React.useState([]);
-  const [columnFilters, setColumnFilters] = React.useState([]);
+export function DataTable({ columns, data }:any) {
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
 
   const table = useReactTable({
     data,
@@ -49,7 +49,7 @@ export function DataTable({ columns, data }) {
       <div className="flex items-center justify-between py-4">
         <Input
           placeholder="Filter courses..."
-          value={table.getColumn("title")?.getFilterValue() ?? ""}
+          value={String(table.getColumn("title")?.getFilterValue() ?? "")}
           onChange={(event) =>
             table.getColumn("title")?.setFilterValue(event.target.value)
           }
