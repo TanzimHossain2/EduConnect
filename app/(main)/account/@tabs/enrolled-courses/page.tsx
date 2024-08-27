@@ -2,6 +2,7 @@ import { getEnrollmentsForUser } from "@/backend/services/courses";
 import { useLoggedInUser } from "@/hooks/use-loggedIn-user";
 import { redirect } from "next/navigation";
 import EnrolledCoursesCard from "../../_components/enrolled-coursecard";
+import Link from "next/link";
 
 const EnrolledCoursesPage = async () => {
   const loggedInUser = await useLoggedInUser();
@@ -20,11 +21,17 @@ const EnrolledCoursesPage = async () => {
         ))
       ) : (
         <>
-          <p>No Enrollments Found...</p>
-          <p>
+          <div className="flex items-center justify-center flex-col">
+          <p className="text-lg font-semibold">No Enrollments Found...</p>
+        
+          <p className="text-sm text-gray-500">
             Please enroll in a course to see it here.
-            <a href="/courses">Browse Courses</a>
+            <Link href="/courses">
+              <span className="text-blue-500"> Browse Courses</span>
+            </Link>
+            
           </p>
+          </div>
         </>
       )}
     </div>

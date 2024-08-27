@@ -1,11 +1,11 @@
 "use client";
- 
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
+import { UpdateCourse } from "@/app/actions/course";
 import { Button } from "@/components/ui/button";
-import { Combobox } from "@/components/ui/combobox";
 import {
   Form,
   FormControl,
@@ -13,101 +13,79 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { cn } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
 import { Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
-import React from "react";
-import { UpdateCourse } from "@/app/actions/course";
 
 const formSchema = z.object({
-  value: z.string().min(1),
-  id: z.string().min(1),
+  subtitle: z.string().min(1, {
+    message: "Title is required",
+  }),
 });
 
-interface CategoryFormProps {
+interface SubTitleFormProps {
   initialData: {
-    value: string;
-    id?: string; 
+    subtitle: string;
   };
   courseId: string;
-  options: {
-    value: string;
-    label: string;
-    id: string;
-  }[];
 }
 
-export const CategoryForm : React.FC<CategoryFormProps> = ({
-  initialData,
+const SubTitleForm = ({
+  initialData = { subtitle: "" },
   courseId,
-  options = [],
-}) => {
+}: SubTitleFormProps) => {
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
 
   const toggleEdit = () => setIsEditing((current) => !current);
 
-
   const form = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      value: initialData?.value || "",
-      id: initialData?.id || "",
-    },
+    defaultValues: initialData,
   });
 
   const { isSubmitting, isValid } = form.formState;
 
-  const onSubmit = async (values: { [key: string]: string }) => {
+  const onSubmit = async (values: Object) => {
     try {
-      const res = await UpdateCourse(courseId, {
-        "category": values.value,
-      });
+      const res = await UpdateCourse(courseId, values);
 
       if (res.error) {
-        toast.error(res.error, { duration: 4000 });
+        toast.error(res.error, { duration: 3000 });
+        return;
       }
-      
-      toast.success("Course updated", { duration: 3000 });
+
       toggleEdit();
       router.refresh();
-    } catch (error) {
-      toast.error("Something went wrong");
+      toast.success("Course subtitle updated successfully", {
+        duration: 2000,
+        icon: "😊",
+      });
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Something went wrong");
     }
   };
-
-  const selectedOptions = options.find(
-    (option) => option.value === initialData.id
-  );
 
   return (
     <div className="mt-6 border bg-gray-50 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Course Category
+        Course Subtitle
         <Button variant="ghost" onClick={toggleEdit}>
           {isEditing ? (
             <>Cancel</>
           ) : (
             <>
               <Pencil className="h-4 w-4 mr-2" />
-              Edit Category
+              Edit Subtitle
             </>
           )}
         </Button>
       </div>
-      {!isEditing && (
-        <p
-          className={cn(
-            "text-sm mt-2",
-            !initialData.value && "text-slate-500 italic"
-          )}
-        >
-          {selectedOptions?.label || "No category"}
-        </p>
-      )}
-      
+
+      {!isEditing && <p className="text-sm mt-2">{initialData.subtitle || "N/A" 
+        }</p>}
       {isEditing && (
         <Form {...form}>
           <form
@@ -116,11 +94,15 @@ export const CategoryForm : React.FC<CategoryFormProps> = ({
           >
             <FormField
               control={form.control}
-              name="value"
+              name="subtitle"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    {options && <Combobox options={options} {...field} />}
+                    <Input
+                      disabled={isSubmitting}
+                      placeholder="e.g. 'Advanced web development'"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -137,3 +119,5 @@ export const CategoryForm : React.FC<CategoryFormProps> = ({
     </div>
   );
 };
+
+export default SubTitleForm;

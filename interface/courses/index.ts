@@ -14,6 +14,7 @@ export interface ICourse {
   instructor: IUser;
   quizSet: ObjectId | null;
   testimonials: ITestimonial[];
+  tags: string[];
   createdOn: Date;
   modifiedOn: Date;
 }

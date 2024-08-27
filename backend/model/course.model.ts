@@ -14,6 +14,7 @@ const courseSchema = new Schema<ICourse>({
   instructor: { type: Schema.Types.ObjectId, ref: "User" },
   quizSet: { type: Schema.Types.ObjectId, ref: "Quiz", default: null },
   testimonials: [{ type: Schema.Types.ObjectId, ref: "Testimonial" }],
+  tags: [{ type: String }],
 },{ timestamps: true });
 
 // indexing the course schema

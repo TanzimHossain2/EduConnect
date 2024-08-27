@@ -1,10 +1,11 @@
-//import { CourseProgress } from "@/components/course-progress";
 import { getAReport } from "@/backend/services/courses";
+import CourseProgress from "@/components/course-progress";
 import { Badge } from "@/components/ui/badge";
 import { IEnrollment } from "@/interface/courses";
 import { calculateProgress, calculateQuizMarks } from "@/lib/populateData";
 import { BookOpen } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 interface Props {
@@ -24,15 +25,15 @@ const EnrolledCoursesCard: React.FC<Props> = async ({ enrollment }) => {
 
   // get all Quizzes and assessments
   const quizzes = report?.quizAssessment?.assessments || [];
-  const totalQuizzes = quizzes.length;
+  const totalQuizzes = quizzes.length || 0;
 
   // Find attempted quizzes
-  const quizzesTaken = quizzes.filter((quiz) => quiz.attempted);
+  const quizzesTaken = quizzes ? quizzes.filter((quiz) => quiz.attempted) : [];
 
   // Calculate marks from quizzes
-  const marksFromQuizzes = calculateQuizMarks(quizzesTaken);
+  const marksFromQuizzes = calculateQuizMarks(quizzesTaken) || 0;
   const otherMarks = report?.quizAssessment?.otherMarks || 0;
-  const totalMarks = marksFromQuizzes + otherMarks;
+  const totalMarks = marksFromQuizzes + otherMarks || 0;
 
   const progress = calculateProgress(
     enrollment?.course?.modules?.length || 0,
@@ -52,9 +53,12 @@ const EnrolledCoursesCard: React.FC<Props> = async ({ enrollment }) => {
           />
         </div>
         <div className="flex flex-col pt-2">
+          <Link href={`/courses/${enrollment?.course?.id}`}>
           <div className="text-lg md:text-base font-medium group-hover:text-sky-700 line-clamp-2">
             {enrollment?.course?.title}
           </div>
+          </Link>
+
           <p className="text-xs text-muted-foreground">
             {enrollment?.course?.category?.title}
           </p>
@@ -115,11 +119,7 @@ const EnrolledCoursesCard: React.FC<Props> = async ({ enrollment }) => {
             </p>
           </div>
 
-          {/*<CourseProgress
-                    size="sm"
-                    value={80}
-                    variant={default 100 ? "success" : ""}
-/>*/}
+          <CourseProgress size="sm" value={progress} />
         </div>
       </div>
     </div>

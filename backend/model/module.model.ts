@@ -53,13 +53,14 @@ moduleSchema.pre("findOneAndDelete", async function (next) {
     
     if (module) {
       await db.lesson.deleteMany({ _id: { $in: module.lessonIds } });
+      
+      // delete aslo from course modules array
+      await db.course.updateOne(
+        { _id: module.course },
+        { $pull: { modules: module._id } }
+      );
     }
 
-    // delete aslo from course modules array
-    await db.course.updateOne(
-      { _id: module.course },
-      { $pull: { modules: module._id } }
-    );
 
 
     next();

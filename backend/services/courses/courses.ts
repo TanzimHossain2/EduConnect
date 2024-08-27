@@ -5,6 +5,7 @@ import { ICourse } from "@/interface/courses";
 import {
   nestedReplaceMongoIdInObject,
   replaceMongoIdInArray,
+  replaceMongoIdInObject,
 } from "@/utils/convertData";
 
 export const getCourseList = async (): Promise<ICourse[]> => {
@@ -48,12 +49,14 @@ export const getCourseList = async (): Promise<ICourse[]> => {
     return replaceMongoIdInArray(courses) as ICourse[];
   } catch (err) {
     console.error("Error fetching courses: ", err);
-    throw new Error("Failed to fetch courses");
+   return [];
   }
 };
 
 export const getCourseDetails = async (id: string) => {
-  const course = await db.course
+
+  try {
+    const course = await db.course
     .findById(id)
     .populate({
       path: "category",
@@ -77,11 +80,22 @@ export const getCourseDetails = async (id: string) => {
     .populate({
       path: "modules",
       model: db.module,
-      select: "-__v",
+      populate: {
+        path: "lessonIds",
+        model: db.lesson,
+      }
+      
     })
     .lean();
 
   return nestedReplaceMongoIdInObject(
     course as NonNullable<typeof course>
   ) as ICourse;
+  } catch (err) {
+    console.error("Error fetching course details: ", err);
+   
+    return null;
+    
+  }
+  
 };
