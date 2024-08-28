@@ -1,5 +1,5 @@
 import { IReport } from "@/interface/courses";
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema,Model } from "mongoose";
 
 const reportSchema = new Schema<IReport>({
   totalCompletedLessons: {
@@ -20,6 +20,6 @@ const reportSchema = new Schema<IReport>({
 });
 
 
-const ReportModel = mongoose.models.Report || mongoose.model("Report", reportSchema);
+const ReportModel : Model<IReport>  = mongoose.models.Report || mongoose.model("Report", reportSchema);
 
 export default ReportModel;

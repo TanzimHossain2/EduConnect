@@ -23,7 +23,6 @@ import { UpdateCourse } from "@/app/actions/course";
 
 const formSchema = z.object({
   value: z.string().min(1),
-  id: z.string().min(1),
 });
 
 interface CategoryFormProps {

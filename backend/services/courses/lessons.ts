@@ -1,5 +1,5 @@
 import { db } from "@/backend/model";
-import { replaceMongoIdInObject } from "@/utils/convertData";
+import { nestedReplaceMongoIdInObject, replaceMongoIdInObject } from "@/utils/convertData";
 
 export const getLesson = async (lessonId: string) => {
   try {
@@ -34,3 +34,20 @@ export const createLesson = async (lessonData: any) => {
     return null;
   }
 };
+
+// get lessons by slug
+
+export const getLessonBySlug = async (slug: string) => {
+  try {
+    const lesson = await db.lesson.findOne({ slug }).lean();
+
+    if (!lesson) {
+      return null;
+    }
+
+    return nestedReplaceMongoIdInObject(lesson);
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+}

@@ -1,4 +1,4 @@
-import { ObjectId, Document } from "mongoose";
+import { Document, ObjectId } from "mongoose";
 
 export interface ICourse {
   id: string;
@@ -60,7 +60,7 @@ export interface IModule {
   active: boolean;
   slug: string;
   course: ICourse;
-  lessonIds: ObjectId[];
+  lessonIds: ILesson[];
   duration: number;
   order: number;
 }
@@ -100,6 +100,7 @@ export interface ILesson {
   slug: string;
   access: "public" | "private";
   order: number;
+  state?: string;
 }
 
 export interface IAssessment {
@@ -125,7 +126,7 @@ export interface IAssessments {
   attempted: boolean;
 }
 
-export interface IQuizSet{
+export interface IQuizSet {
   id: string;
   title: string;
   description: string;
@@ -133,7 +134,6 @@ export interface IQuizSet{
   active: boolean;
   quizIds: IQuiz[];
 }
-
 
 export interface IQuiz extends Document {
   id: string;
@@ -146,6 +146,17 @@ export interface IQuiz extends Document {
     text: string;
     is_correct: boolean;
   }[];
-  }
-  
+}
 
+export enum State {
+  started = "started",
+  completed = "completed",
+}
+export interface IWatch {
+  id: string;
+  user: IUser;
+  lesson: ILesson;
+  lastTime: number;
+  state: State;
+  module: IModule;
+}

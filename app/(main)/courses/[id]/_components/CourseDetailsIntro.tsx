@@ -40,7 +40,7 @@ const CourseDetailsIntro: React.FC<Props> =async ({ course }) => {
                 {
                   hasEnrolled ? (
                     <Link
-                    href=""
+                    href={`/courses/${course?.id}/lesson`}
                     className={cn(
                       buttonVariants({ size: "lg" })
                     )}

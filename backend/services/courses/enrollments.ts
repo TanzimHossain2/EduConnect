@@ -64,6 +64,12 @@ export const getEnrollmentsForUser = async (userId: string) => {
   }
 };
 
+/**
+ *  Check if a student has enrollment for a course 
+ * @param courseId 
+ * @param studentId 
+ * @returns  boolean
+ */
 export const hasEnrollmentForCourse = async (
   courseId: string,
   studentId: string

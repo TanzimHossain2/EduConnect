@@ -3,12 +3,13 @@ import { getCourseDetailsByInstructor ,getInstructorCourses} from "./courseByIns
 import {
   getCourseDetails,
   getCourseList,
+  getCourseModulesDetails,
 } from "./courses";
 import { create } from "./createCourse";
 import { getEnrollmentsForCourse, getEnrollmentsForUser, hasEnrollmentForCourse } from "./enrollments";
-import { createLesson, getLesson } from "./lessons";
-import { createModule, getModuleById } from "./modules";
-import { getAReport } from "./reports";
+import { createLesson, getLesson, getLessonBySlug } from "./lessons";
+import { createModule, getModuleById, getModuleBySlug } from "./modules";
+import { createWatchReport, getAReport } from "./reports";
 import { getTestimonialsForCourse } from "./testimonials";
 
 export {
@@ -28,4 +29,8 @@ export {
   hasEnrollmentForCourse,
   getInstructorCourses,
   getModuleById,
+  getLessonBySlug,
+  getCourseModulesDetails,
+  getModuleBySlug,
+  createWatchReport,
 };

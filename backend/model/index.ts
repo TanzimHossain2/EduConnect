@@ -9,6 +9,7 @@ import QuizModel from "./quizzes.model";
 import ReportModel from "./report.model";
 import TestimonialModel from "./testimonial.model";
 import UserModel from "./user.model";
+import WatchModel from "./watch.model";
 
 export const db = {
   course: CourseModel,
@@ -21,5 +22,6 @@ export const db = {
   report: ReportModel,
   assessment: AssessmentModel,
   quizSet: QuizSetModel,
-  quiz: QuizModel
+  quiz: QuizModel,
+  watch: WatchModel,
 };

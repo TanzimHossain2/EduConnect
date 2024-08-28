@@ -33,3 +33,24 @@ export const getModuleById = async (moduleId: string) => {
     return null;
   }
 };
+
+export const getModuleBySlug = async (slug: string) => {
+  if (!slug) {
+    return null;
+  }
+
+  try {
+    const res = await db.module.findOne({ slug })
+    .populate({ path: "lessonIds", model: db.lesson })
+    .lean();
+
+    if (!res) {
+      return null;
+    }
+
+    return nestedReplaceMongoIdInObject(res);
+  } catch (err) {
+    console.error("Error fetching module:", err);
+    return null;
+  }
+}

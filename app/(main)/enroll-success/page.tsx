@@ -54,8 +54,12 @@ const SuccessPage: React.FC<SuccessParams> = async ({
   const instructorEmail = course?.instructor?.email;
 
   if (paymentStatus === "succeeded") {
-    //@ts-ignore
-    const enrollmentResponse = await enrollForCourse(courseId,loggedInUser?.id,"stripe");
+
+    const enrollmentResponse = await enrollForCourse(
+      courseId,
+      loggedInUser?.id ?? "",
+      "stripe"
+    );
 
     //send Emails to instructor and student and  person who enrolled
     const emailsToSend: EmailInfo[] = [
@@ -72,7 +76,6 @@ const SuccessPage: React.FC<SuccessParams> = async ({
     ];
 
     const emailSentResponse = await sendEmails(emailsToSend);
-
   }
 
   return (
@@ -92,7 +95,7 @@ const SuccessPage: React.FC<SuccessParams> = async ({
             <Link href="/courses">Browse Courses</Link>
           </Button>
           <Button asChild variant="outline" size="sm">
-            <Link href="/think-in-a-redux-way/introduction">Play Course</Link>
+            <Link href={`/courses/${courseId}/lesson`}>Play Course</Link>
           </Button>
         </div>
       </div>

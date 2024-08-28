@@ -7,6 +7,7 @@ import {
   replaceMongoIdInArray,
   replaceMongoIdInObject,
 } from "@/utils/convertData";
+import path from "path";
 
 export const getCourseList = async (): Promise<ICourse[]> => {
   try {
@@ -99,3 +100,32 @@ export const getCourseDetails = async (id: string) => {
   }
   
 };
+
+
+export const getCourseModulesDetails = async (id: string) => {
+  try {
+
+    const course = await db.course
+      .findById(id)
+      .populate({
+        path: "modules",
+        model: db.module,
+        populate: {
+          path : "lessonIds",
+          model : db.lesson
+        }
+      }).lean();
+
+    return nestedReplaceMongoIdInObject( course as NonNullable<typeof course>) as ICourse;
+
+
+
+    
+  } catch (err) {
+     
+    console.error("Error fetching course modules details: ", err);
+    return null;
+  }
+}
+
+

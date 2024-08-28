@@ -25,9 +25,12 @@ diagrams folder contains the diagram of the project in the form of a .drawio fil
 - [x] Show Review course, Rating course
 - [x] Course Module CRUD
 - [x] Lesson CRUD
+- [x] lesson page
+- [x] Video player for lesson
 
 ## Tech Stack
 
 -[x] Use cloudinary to store image
 -[x] Use Auth.js for authentication
 -[x] hello-pangea/dnd for drag and drop
+-[x] react-player for video player
