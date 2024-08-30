@@ -17,7 +17,8 @@ const ActiveFilters  = ({ filter }: {filter: FilterProps}) => {
   return (
     <div className="flex items-center gap-2 flex-wrap">
       {/* active categories */}
-      {filter.categories.length > 0 &&
+      { filter.categories &&
+      filter.categories.length > 0 &&
         filter.categories.map((category) => (
           <Button
             key={category}
@@ -32,7 +33,9 @@ const ActiveFilters  = ({ filter }: {filter: FilterProps}) => {
           </Button>
         ))}
       {/* active prices */}
-      {filter.price.length > 0 &&
+      {
+      filter.price &&
+      filter.price.length > 0 &&
         filter.price.map((price) => (
           <Button
             key={price}

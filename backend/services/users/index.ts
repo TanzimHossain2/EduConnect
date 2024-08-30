@@ -17,3 +17,22 @@ export  const  getUserByEmail = async (email: string)=> {
         return null;
     }
 }
+
+
+export const getUserById = async (id : string) => {
+    if (!id) {
+        return null;
+    }
+
+    const user = await db.user.findById(id)
+    .select("-password")
+    .lean();
+
+    if (user) {
+        return replaceMongoIdInObject(user) as IUser;
+    } else {
+        return null;
+    }
+}
+
+

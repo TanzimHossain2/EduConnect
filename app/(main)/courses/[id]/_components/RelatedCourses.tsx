@@ -72,7 +72,9 @@ const RelatedCourses = () => {
           <CarouselPrevious />
           <CarouselNext />
           <CarouselContent>
-            {courses.map((course) => (
+            {
+              courses && courses.length > 0 &&
+            courses.map((course) => (
               <CarouselItem
                 key={course.id}
                 className="md:basis-1/2 lg:basis-1/3"

@@ -1,17 +1,6 @@
-"use client";
+import { QuizContext } from "./QuizContext";
+import { UserContext } from "./userContext";
 
-import { createContext } from "react";
 
-interface User {
-  email: string;
-  firstName: string;
-  lastName: string;
-  profilePicture: string;
-}
+export { UserContext, QuizContext };
 
-interface UserContextType {
-  user: User | null;
-  setUser: (user: any) => void;
-}
-
-export const UserContext = createContext<UserContextType | undefined>(undefined);

@@ -1,19 +1,20 @@
 import { dbConnect } from "@/backend/db/connectDb";
 import { db } from "@/backend/model";
 import { ICourse } from "@/interface/courses";
+
 import {
+  nestedReplaceMongoIdInObject,
   replaceMongoIdInArray,
   replaceMongoIdInObject,
 } from "@/utils/convertData";
-import { getEnrollmentsForCourse } from "./enrollments";
-import { getTestimonialsForCourse } from "./testimonials";
+import path from "path";
 
 export const getCourseList = async (): Promise<ICourse[]> => {
   try {
     await dbConnect();
 
     const courses = await db.course
-      .find({})
+      .find({ active: true })
       .select([
         "title",
         "subtitle",
@@ -49,12 +50,14 @@ export const getCourseList = async (): Promise<ICourse[]> => {
     return replaceMongoIdInArray(courses) as ICourse[];
   } catch (err) {
     console.error("Error fetching courses: ", err);
-    throw new Error("Failed to fetch courses");
+   return [];
   }
 };
 
 export const getCourseDetails = async (id: string) => {
-  const course = await db.course
+
+  try {
+    const course = await db.course
     .findById(id)
     .populate({
       path: "category",
@@ -78,47 +81,54 @@ export const getCourseDetails = async (id: string) => {
     .populate({
       path: "modules",
       model: db.module,
-      select: "-__v",
+      populate: {
+        path: "lessonIds",
+        model: db.lesson,
+      }
+
     })
     .lean();
 
-  return replaceMongoIdInObject(
+  return nestedReplaceMongoIdInObject(
     course as NonNullable<typeof course>
   ) as ICourse;
+  } catch (err) {
+    console.error("Error fetching course details: ", err);
+   
+    return null;
+    
+  }
+  
 };
 
-export const getCourseDetailsByInstructor = async (id: string) => {
-  const courses = await db.course.find({ instructor: id }).lean();
+export const getCourseModulesDetails = async (id: string) => {
+  try {
+    const course = await db.course
+      .findById(id)
+      .populate({
+        path: "modules",
+        model: db.module,
+        populate: {
+          path : "lessonIds",
+          model : db.lesson
+        }
+      })
+      .populate({
+        path: "quizSet",
+        model: db.quizSet,
+        populate: {
+          path: "quizIds",
+          model: db.quiz
+        }
+      })
+      .lean(); 
 
-  const enrollments = await Promise.all(
-    courses.map(async (course) => {
-      const enrollments = await getEnrollmentsForCourse(course._id.toString());
-      return enrollments;
-    })
-  );
+    return nestedReplaceMongoIdInObject( course as NonNullable<typeof course>) as ICourse;
+  } catch (err) {
+     
+    console.error("Error fetching course modules details: ", err);
+    return null;
+  }
+}
 
-  const testimonials = await Promise.all(
-    courses.map(async (course) => {
-      const testimonials = await getTestimonialsForCourse(
-        course._id.toString()
-      );
-      return testimonials;
-    })
-  );
 
-  const totalEnrollments = enrollments.reduce(
-    (acc, val) => acc + val.length,
-    0
-  );
-  const totalTestimonials = testimonials.flat();
-  const averageRating =
-    totalTestimonials.reduce((acc, val) => acc + val.rating, 0) /
-    totalTestimonials.length;
-
-  return {
-    courses: courses.length,
-    enrollments: totalEnrollments,
-    reviews: totalTestimonials.length,
-    averageRating: averageRating.toPrecision(2),
-  };
-};

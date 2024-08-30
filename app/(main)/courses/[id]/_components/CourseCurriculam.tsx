@@ -1,21 +1,6 @@
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { Accordion } from "@/components/ui/accordion";
 import { ICourse } from "@/interface/courses";
-import { cn } from "@/lib/utils";
-import {
-  BookCheck,
-  Clock10,
-  FileQuestion,
-  NotepadText,
-  Radio,
-  StickyNote,
-  Tv,
-  Video,
-} from "lucide-react";
+import { BookCheck, Clock10 } from "lucide-react";
 import CourseModuleList from "./module/CourseModuleList";
 
 interface Props {
@@ -23,11 +8,16 @@ interface Props {
 }
 
 const CourseCurriculam: React.FC<Props> = ({ course }) => {
-  const totalDuration = course?.modules?.reduce(
-    (acc, obj) => acc + obj.duration,
-    0
-  );
-
+  const totalDuration = course?.modules?.map(item=> {
+    return item.lessonIds.reduce((acc, lesson)=>{
+      return acc + lesson.duration;
+    }, 0);
+  }).reduce((acc, duration)=>{
+    return acc + duration;
+  }
+  , 0);
+      
+   
   return (
     <>
       <div className="flex gap-x-5 items-center justify-center flex-wrap mt-4 mb-6 text-gray-600 text-sm">
@@ -37,7 +27,7 @@ const CourseCurriculam: React.FC<Props> = ({ course }) => {
         </span>
         <span className="flex items-center gap-1.5">
           <Clock10 className="w-4 h-4" />
-          {(totalDuration / 60).toPrecision(2)}+ Hours
+          {(totalDuration / 3600).toPrecision(2)}+ Hours
         </span>
 
         {/* <span className="flex items-center gap-1.5">
@@ -52,10 +42,9 @@ const CourseCurriculam: React.FC<Props> = ({ course }) => {
         className="w-full"
       >
         {course?.modules &&
+        course?.modules.length > 0 &&
           course?.modules.map((module) => {
-            return (
-              <CourseModuleList key={module._id.toString()} module={module} />
-            );
+            return <CourseModuleList key={module.id} module={module} />;
           })}
       </Accordion>
     </>

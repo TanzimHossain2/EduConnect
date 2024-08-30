@@ -17,6 +17,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import { useUser } from "@/hooks/useUser";
+
 
 export function MainNav({
   items,
@@ -25,6 +27,7 @@ export function MainNav({
   items: { title: string; href: string; disabled?: boolean }[];
   children?: React.ReactNode;
 }) {
+  const { user } = useUser();
   const [showMobileMenu, setShowMobileMenu] = useState<boolean>(false);
   const [loginSession, setLoginSession] = useState<any>(null);
 
@@ -101,9 +104,20 @@ export function MainNav({
           </DropdownMenuTrigger>
 
           <DropdownMenuContent align="end" className="w-56 mt-4">
+
             <DropdownMenuItem className="cursor-pointer" asChild>
               <Link href="/account">Profile</Link>
             </DropdownMenuItem>
+
+           {
+            user && user.role === "instructor" && (
+              <DropdownMenuItem className="cursor-pointer" asChild>
+              <Link href="/dashboard">Dashboard</Link>
+            </DropdownMenuItem>
+            )
+           }
+
+
             <DropdownMenuItem className="cursor-pointer" asChild>
               <Link href="/account/enrolled-courses">My Courses</Link>
             </DropdownMenuItem>

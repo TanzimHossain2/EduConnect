@@ -1,5 +1,7 @@
+import { hasEnrollmentForCourse } from "@/backend/services/courses";
 import EnrollCourse from "@/components/enroll-course";
 import { buttonVariants } from "@/components/ui/button";
+import { useLoggedInUser } from "@/hooks/use-loggedIn-user";
 import { ICourse } from "@/interface/courses";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
@@ -9,8 +11,14 @@ interface Props {
   course: ICourse;
 }
 
-const CourseDetailsIntro: React.FC<Props> = ({ course }) => {
+const CourseDetailsIntro: React.FC<Props> =async ({ course }) => {
   const { title, subtitle, thumbnail } = course;
+  const loggedUser = await useLoggedInUser();
+
+  const hasEnrolled = await hasEnrollmentForCourse(course.id, loggedUser?.id?? "");
+
+
+
   return (
     <div className="overflow-x-hidden  grainy">
       <section className="pt-12  sm:pt-16">
@@ -28,7 +36,22 @@ const CourseDetailsIntro: React.FC<Props> = ({ course }) => {
               </p>
 
               <div className="mt-6 flex items-center justify-center flex-wrap gap-3">
-                <EnrollCourse asLink={false} courseId={course?.id} />
+
+                {
+                  hasEnrolled ? (
+                    <Link
+                    href={`/courses/${course?.id}/lesson`}
+                    className={cn(
+                      buttonVariants({ size: "lg" })
+                    )}
+                  >
+                    Continue Learning
+                  </Link>
+
+                  ) : (
+                    <EnrollCourse asLink={false} courseId={course?.id} />
+                  )
+                }
 
                 <Link
                   href=""
@@ -38,7 +61,10 @@ const CourseDetailsIntro: React.FC<Props> = ({ course }) => {
                 >
                   See Intro
                 </Link>
+
               </div>
+
+
             </div>
           </div>
 

@@ -1,4 +1,4 @@
-import { ObjectId } from "mongoose";
+import { Document, ObjectId } from "mongoose";
 
 export interface ICourse {
   id: string;
@@ -12,8 +12,9 @@ export interface ICourse {
   active: boolean;
   category: ICategory;
   instructor: IUser;
-  quizzes: ObjectId;
+  quizSet: ObjectId | null;
   testimonials: ITestimonial[];
+  tags: string[];
   createdOn: Date;
   modifiedOn: Date;
 }
@@ -56,11 +57,12 @@ export interface IModule {
   id: string;
   title: string;
   description: string;
-  status: string;
+  active: boolean;
   slug: string;
-  course: string;
-  lessonIds: string[];
+  course: ICourse;
+  lessonIds: ILesson[];
   duration: number;
+  order: number;
 }
 
 export interface ITestimonial {
@@ -70,23 +72,96 @@ export interface ITestimonial {
   user: IUser;
   courseId: ICourse;
   rating: number;
+  studentName?: string;
 }
 
 export interface IEnrollment {
+  _id: string;
+  id: string;
   enrollment_date: Date;
   status: string;
   completion_date: Date;
   method: string;
   course: ICourse;
   student: IUser;
+  studentName?: string;
+  studentEmail?: string;
+  progress?: number;
+  quizMark?: number;
 }
 
-export interface ILesson {
+export interface ILesson extends Document {
+  id: string;
   title: string;
   description: string;
   duration: number;
   video_url: string;
-  published: boolean;
+  active: boolean;
   slug: string;
-  access: string;
+  access: "public" | "private";
+  order: number;
+  state?: string;
+}
+
+export interface IAssessment {
+  assessments: IAssessments[];
+  otherMarks: number;
+}
+
+export interface IReport {
+  course: ICourse;
+  student: IUser;
+  totalCompletedLessons: ObjectId[];
+  totalCompletedModules: ObjectId[];
+  quizAssessment: IAssessment;
+  completion_date: Date;
+  courseCompletion: boolean;
+}
+
+export interface IAssessments {
+  quizId: ObjectId;
+  options: {
+    option: string;
+    isCorrect: boolean;
+    isSelected: boolean;
+  }[];
+  attempted: boolean;
+}
+
+export interface IQuizSet {
+  id: string;
+  title: string;
+  description: string;
+  slug: string;
+  active: boolean;
+  quizIds: IQuiz[];
+}
+
+export interface IQuiz extends Document {
+  id: string;
+  title: string;
+  description: string;
+  explanations: string;
+  slug: string;
+  marks: number;
+  options: {
+    text: string;
+    is_correct: boolean;
+    label?: string;
+    isCorrect?: boolean;
+    id?: string;
+  }[];
+}
+
+export enum State {
+  started = "started",
+  completed = "completed",
+}
+export interface IWatch {
+  id: string;
+  user: IUser;
+  lesson: ILesson;
+  lastTime: number;
+  state: State;
+  module: IModule;
 }

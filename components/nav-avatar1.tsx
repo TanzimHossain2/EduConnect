@@ -7,10 +7,6 @@ interface Props {
 }
 
 const NavAvatar1 : React.FC<Props> = ({children}) => {
-   
-    console.log("NavAvatar1");
-    
-
     return (
        <>
         <Avatar>

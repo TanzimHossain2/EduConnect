@@ -34,7 +34,6 @@ export function MobileNav({
   }
 
   useEffect(() => {
-    console.log("test");
     setLoginSession(session);
   }, [session]);
 

@@ -72,7 +72,9 @@ const HomePage = async () => {
         </div>
 
         <div className="mx-auto grid justify-center gap-4 grid-cols-2  md:grid-cols-3 2xl:grid-cols-4">
-          {categories.map((category) => {
+          {
+            categories && categories.length > 0 &&
+          categories.map((category) => {
             return (
               <Link
                 href={`/categories/${category.id}`}
@@ -107,7 +109,9 @@ const HomePage = async () => {
         </div>
 
         <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-4">
-          {courses.map((course) => {
+          {
+           categories && categories.length > 0 &&
+          courses.map((course) => {
             return <CourseCard course={course} key={course.id} />;
           })}
         </div>

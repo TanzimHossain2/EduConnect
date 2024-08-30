@@ -12,13 +12,13 @@ export const GET = async (req: NextRequest) => {
         return new NextResponse("Email is required", { status: 400 });
     }
     
-
     const user = await getUserByEmail(email as string);
 
     const newUser = {
         firstName : user?.firstName,
         lastName : user?.lastName,
         profilePicture : user?.profilePicture,
+        role: user?.role,
     }
 
     if (user) {
