@@ -1,6 +1,6 @@
 import { dbConnect } from "@/backend/db/connectDb";
 import { db } from "@/backend/model";
-import { nestedReplaceMongoIdInObject, replaceMongoIdInArray } from "@/utils/convertData";
+import { nestedReplaceMongoIdInArray, nestedReplaceMongoIdInObject, replaceMongoIdInArray } from "@/utils/convertData";
 
 export async function getCategories() {
  await dbConnect ();
@@ -26,6 +26,10 @@ export async function getCategoryDetails(categoryId: string) {
     return nestedReplaceMongoIdInObject(category);
   } catch (error) {
     console.error("Error fetching category details: ", error);
-    throw new Error(String(error))
+    return {
+      error: String(error),
+      code: 500
+    }
   }
 }
+

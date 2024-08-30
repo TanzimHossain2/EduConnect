@@ -8,6 +8,7 @@ interface Props {
 }
 
 const CourseCurriculam: React.FC<Props> = ({ course }) => {
+  
   const totalDuration = course?.modules?.map(item=> {
     return item.lessonIds.reduce((acc, lesson)=>{
       return acc + lesson.duration;

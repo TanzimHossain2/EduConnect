@@ -64,7 +64,7 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({ userinfo }) => {
               <Input
                 type="text"
                 placeholder="First Name:"
-                id="firstname"
+                id="firstName"
                 name="firstName"
                 value={infoState.firstName}
                 onChange={handleChange}
@@ -78,9 +78,10 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({ userinfo }) => {
               <Input
                 type="text"
                 placeholder="Last Name:"
-                name="LastName"
-                onChange={handleChange}
+                id="lastName"
+                name="lastName"
                 value={infoState.lastName}
+                onChange={handleChange}
                 required
               />
             </div>

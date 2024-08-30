@@ -45,7 +45,7 @@ export interface IUser {
   phone: string;
   role: role;
   bio: string;
-  SocialMedia: {
+  socialMedia: {
     [key: string]: string;
   };
   profilePicture: string;

@@ -1,5 +1,5 @@
 import { db } from "@/backend/model";
-import { replaceMongoIdInArray } from "@/utils/convertData";
+import { nestedReplaceMongoIdInArray, replaceMongoIdInArray } from "@/utils/convertData";
 
 export const getTestimonialsForCourse = async (courseId: string) => {
   try {
@@ -7,9 +7,10 @@ export const getTestimonialsForCourse = async (courseId: string) => {
       .find({ courseId: courseId })
       .lean();
 
-    return replaceMongoIdInArray(testimonials);
+    return nestedReplaceMongoIdInArray(testimonials);
   } catch (err) {
     console.error("Error fetching testimonials: ", err);
     throw new Error("Failed to fetch testimonials");
   }
 };
+

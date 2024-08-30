@@ -334,9 +334,9 @@ export const addQuizAssessment = async (
       obj.quizId = new mongoose.Types.ObjectId(quiz.id);
       const found = answers.find((a: any) => a.quizId === quiz.id);
       if (found) {
-        obj.attmpted = true;
+        obj.attempted = true;
       } else {
-        obj.attmpted = false;
+        obj.attempted = false;
       }
 
       const mergedOptions = quiz.options.map((o) => {

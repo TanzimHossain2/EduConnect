@@ -5,7 +5,7 @@ import { useLoggedInUser } from "@/hooks/use-loggedIn-user";
 import DownloadCertificate from "./download-certificate";
 import GiveReview from "./give-review";
 import SidebarModules from "./sidebar-modules";
-import { getAReport } from "@/backend/services/courses";
+import { getAReport, getTestimonialsForCourse } from "@/backend/services/courses";
 import Quiz from "./quiz";
 import { IQuizSet } from "@/interface/courses";
 
@@ -42,12 +42,19 @@ export const CourseSidebar = async ({ courseId }: { courseId: string }) => {
     })
   );
 
-  const totalCompletedLessons = report?.totalCompletedModules ? report?.totalCompletedModules.length : 0;
+  const totalCompletedLessons = report?.totalCompletedModules
+    ? report?.totalCompletedModules.length
+    : 0;
   const totalModules = course?.modules ? course.modules.length : 0;
-  const totalProgress = (totalModules > 0) ? (totalCompletedLessons / totalModules) * 100 : 0;
+  const totalProgress =
+    totalModules > 0 ? (totalCompletedLessons / totalModules) * 100 : 0;
 
   const quizSet = course?.quizSet as unknown as IQuizSet;
   const isQuizComplete = report?.quizAssessment ? true : false;
+
+  const testimonial = await getTestimonialsForCourse(courseId);
+  const findTestimonial = testimonial.find( (t) => t.user === userId);
+
 
   return (
     <>
@@ -62,13 +69,22 @@ export const CourseSidebar = async ({ courseId }: { courseId: string }) => {
 
         <SidebarModules courseId={courseId} modules={updatedModules} />
 
-     <div className="w-full px-4 lg:px-14 pt-10 border-t">
-     {quizSet && <Quiz courseId={courseId} quizSet={quizSet} isTaken={isQuizComplete}  />}
-     </div>
+        <div className="w-full px-4 lg:px-14 pt-10 border-t">
+          {quizSet && (
+            <Quiz
+              courseId={courseId}
+              quizSet={quizSet}
+              isTaken={isQuizComplete}
+            />
+          )}
+        </div>
 
         <div className="px-6 w-full">
-          <DownloadCertificate courseId={courseId} totalProgress={totalProgress} />
-          <GiveReview courseId={courseId} />
+          <DownloadCertificate
+            courseId={courseId}
+            totalProgress={totalProgress}
+          />
+          <GiveReview courseId={courseId} reviewData={findTestimonial}  />
         </div>
       </div>
     </>

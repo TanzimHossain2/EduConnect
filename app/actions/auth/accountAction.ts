@@ -34,15 +34,13 @@ interface IData {
 }
 
 export const updateContactInfo = async (email: string, data:IData) => {
-
-    const SanitizeData  = nestedSanitizeData(data) as IData;
+    const sanitizeData  = nestedSanitizeData(data) as IData;
 
     try {
         
         const filter = { email: email }; 
-
-        const updated = await db.user.findOneAndUpdate(filter, SanitizeData);  
-        
+        const updated = await db.user.findOneAndUpdate(filter,sanitizeData , {new: true});  
+    
         if (!updated) {
             return {
                 error: "User not found",
@@ -58,6 +56,7 @@ export const updateContactInfo = async (email: string, data:IData) => {
         }
         
     } catch (err:any) {
+        console.log("error updating", err);
         return {error: err.message} 
     }
     

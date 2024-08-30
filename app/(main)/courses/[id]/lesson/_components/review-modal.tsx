@@ -16,6 +16,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { addTestimonial,UpdateTestimonial } from "@/app/actions/testimonial";
+import { useRouter } from "next/navigation";
+import { ITestimonial } from "@/interface/courses";
+import { useState } from "react";
+
 const formSchema = z.object({
   rating: z.coerce
     .number()
@@ -29,26 +34,61 @@ const formSchema = z.object({
     message: "Description is required!",
   }),
 });
-export const ReviewModal = ({ open, setOpen }: { open: boolean, setOpen: React.Dispatch<React.SetStateAction<boolean>> }) => {
+
+interface ReviewModalProps {
+  courseId: string;
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  reviewData: ITestimonial;
+}
+
+export const ReviewModal = ({ courseId, open, setOpen,reviewData }:ReviewModalProps) => {
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      rating: "",
-      review: "",
+      rating: reviewData?.rating ?? "",
+      review: reviewData?.content ?? "",
     },
   });
+
+  const [editReview, setEditReview] = useState<boolean>(!!reviewData);
+
+  const router = useRouter();
 
   const { isSubmitting, isValid } = form.formState;
 
   const onSubmit = async (values: any) => {
-    try {
-      toast.success("Review added");
-      setOpen(false);
-    } catch (error) {
-      toast.error("Something went wrong");
+    const { rating, review } = values;
+    const data = {
+      rating: parseInt(rating),
+      content: review,
     }
-    console.log(values);
+
+    try {
+      if (editReview && reviewData?.id) {
+        const res = await UpdateTestimonial(reviewData.id, data);
+        if (res.code !== 200) {
+          throw new Error(res.error);
+        }
+        toast.success("Review updated");
+      }else {
+        const res = await addTestimonial(courseId, data);
+        if (res.code !== 200) {
+          throw new Error(res.error);
+        }
+        toast.success("Review added");
+      }
+      setOpen(false);
+      router.refresh();
+      form.reset();
+
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Something went wrong");
+    }
   };
+
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       {/* <DialogTrigger>Open</DialogTrigger> */}
@@ -106,13 +146,20 @@ export const ReviewModal = ({ open, setOpen }: { open: boolean, setOpen: React.D
               )}
             />
             <div className="flex items-center gap-x-2">
-              <Button variant="outline" type="button">
+
+              <Button variant="outline" type="button"
+                onClick={() => {
+                  setOpen(false);
+                  form.reset();
+                }}
+              >
                 Cancel
               </Button>
 
               <Button type="submit" disabled={isSubmitting}>
-                Continue
+                {editReview ? "Update" : "Submit"}
               </Button>
+
             </div>
           </form>
         </Form>

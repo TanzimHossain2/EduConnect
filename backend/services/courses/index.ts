@@ -1,9 +1,12 @@
 import { getCategories, getCategoryDetails } from "./categories";
 import { getCourseDetailsByInstructor ,getInstructorCourses} from "./courseByInstructor";
 import {
+  getCourseByCategory,
   getCourseDetails,
   getCourseList,
   getCourseModulesDetails,
+  getFilterCourseList,
+  getRelatedCourses,
 } from "./courses";
 import { create } from "./createCourse";
 import { getEnrollmentsForCourse, getEnrollmentsForUser, hasEnrollmentForCourse } from "./enrollments";
@@ -34,4 +37,7 @@ export {
   getModuleBySlug,
   createWatchReport,
   createAssessmentReport,
+  getFilterCourseList,
+  getCourseByCategory,
+  getRelatedCourses,
 };

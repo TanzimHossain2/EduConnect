@@ -64,7 +64,7 @@ const HomePage = async () => {
           <SectionTitle>Categories</SectionTitle>
 
           <Link
-            href={"/categories"}
+            href={"/courses"}
             className=" text-sm font-medium  hover:opacity-80 flex items-center gap-1"
           >
             Browse All <ArrowRightIcon className="h-4 w-4" />
@@ -77,7 +77,7 @@ const HomePage = async () => {
           categories.map((category) => {
             return (
               <Link
-                href={`/categories/${category.id}`}
+                href={`/courses/categories/${category.id}`}
                 key={category.id}
                 className="relative overflow-hidden rounded-lg border bg-background p-2 hover:scale-105 transition-all duration-500 ease-in-out"
               >
