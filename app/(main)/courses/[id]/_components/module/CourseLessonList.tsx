@@ -1,10 +1,8 @@
-import { Tv } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { getLesson } from "@/backend/services/courses";
+import { Tv } from "lucide-react";
 
 
-const CourseLessonList = async ({lessonId}:{lessonId:string}) => {
-    const lesson = await getLesson(lessonId);
+const CourseLessonList = async ({lesson}:{lesson:any}) => {
     return (
         <button
             type="button"

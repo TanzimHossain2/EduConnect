@@ -25,7 +25,7 @@ const userSchema = new Schema<IUser>(
       default: "student",
     },
     bio: { type: String, required: false },
-    SocialMedia: { type: Object, required: false },
+    socialMedia: { type: Object, required: false },
     profilePicture: { type: String, required: false },
     designation: { type: String, required: false },
   },

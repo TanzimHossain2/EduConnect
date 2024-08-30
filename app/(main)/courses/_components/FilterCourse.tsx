@@ -1,196 +1,24 @@
-"use client"
+import { Accordion } from "@/components/ui/accordion";
+import { ICategory } from "@/interface/courses";
 
-import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-} from "@/components/ui/accordion";
+import { getCategories } from "@/backend/services/courses";
+import CategoriesFilter from "./CategoriesFilter";
+import PriceFilter from "./PriceFilter";
+import RatingFilter from "./RatingFilter";
 
-import { Checkbox } from "@/components/ui/checkbox";
-
-import { useState } from "react";
-
-const PRICE_OPTIONS = [
-    { label: "Free", value: "free" },
-    { label: "Paid", value: "paid" },
-];
-
-const CATEGORY_OPTIONS = [
-    {
-        id: 1,
-        label: "Design",
-        value: "design",
-    },
-
-    {
-        id: 3,
-        label: "Development",
-        value: "development",
-    },
-    {
-        id: 4,
-        label: "Marketing",
-        value: "marketing",
-    },
-    {
-        id: 5,
-        label: "IT & Software",
-        value: "it-software",
-    },
-    {
-        id: 6,
-        label: "Personal Development",
-        value: "personal-development",
-    },
-    {
-        id: 7,
-        label: "Business",
-        value: "business",
-    },
-    {
-        id: 8,
-        label: "Photography",
-        value: "photography",
-    },
-    {
-        id: 9,
-        label: "Music",
-        value: "music",
-    },
-];
-
-interface FilterState {
-  categories: string[];
-  price: string[];
-  sort: string;
-}
-
-const FilterCourse = () => {
-
-  const [filter, setFilter] = useState<FilterState>({
-    categories: ["development"],
-    price: ["free"],
-    sort: "",
-  });
-
-    // //   apply checkbox filter
-    // const applyArrayFilter = ({ type, value }) => {
-    //     const isFilterApplied = filter[type].includes(value);
-
-    //     if (isFilterApplied) {
-    //         setFilter((prev) => ({
-    //             ...prev,
-    //             [type]: prev[type].filter((v) => v !== value),
-    //         }));
-    //     } else {
-    //         setFilter((prev) => ({
-    //             ...prev,
-    //             [type]: [...prev[type], value],
-    //         }));
-    //     }
-    // };
-
-
-    // Apply checkbox filter
-const applyArrayFilter = ({
-  type,
-  value,
-}: {
-  type: keyof FilterState;
-  value: string;
-}) => {
-  setFilter((prev) => {
-    const currentFilterValue = prev[type];
-
-    // Ensure that currentFilterValue is treated as an array
-    if (Array.isArray(currentFilterValue)) {
-      const isFilterApplied = currentFilterValue.includes(value);
-
-      return {
-        ...prev,
-        [type]: isFilterApplied
-          ? currentFilterValue.filter((v) => v !== value)
-          : [...currentFilterValue, value],
-      };
-    }
-
-    // If the value is not an array, return the previous state
-    return prev;
-  });
-};
-
-
+const FilterCourse = async () => {
+  const categories = (await getCategories()) as ICategory[];
 
   return (
-        <div className="hidden lg:block">
-            <Accordion defaultValue={["categories"]} type="multiple">
-              {/* Categories filter */}
-              <AccordionItem value="categories">
-                <AccordionTrigger className="py-3 text-sm text-gray-400 hover:text-gray-500">
-                  <span className="font-medium text-gray-900">Categories</span>
-                </AccordionTrigger>
+    <div className="hidden lg:block">
+      <Accordion defaultValue={["categories"]} type="multiple">
+        <CategoriesFilter categories={categories} />
 
-                <AccordionContent className="pt-6 animate-none">
-                  <ul className="space-y-4">
-                    {CATEGORY_OPTIONS.map((option, optionIdx) => (
-                      <li key={option.value} className="flex items-center">
-                        <Checkbox
-                          id={`category-${optionIdx}`}
-                          onCheckedChange={() => {
-                            applyArrayFilter({
-                              type: "categories",
-                              value: option.value,
-                            });
-                          }}
-                          checked={filter.categories.includes(option.value)}
-                        />
-                        <label
-                          htmlFor={`category-${optionIdx}`}
-                          className="ml-3 text-sm text-gray-600 cursor-pointer"
-                        >
-                          {option.label}
-                        </label>
-                      </li>
-                    ))}
-                  </ul>
-                </AccordionContent>
-              </AccordionItem>
-              {/* Price filter */}
-              <AccordionItem value="price">
-                <AccordionTrigger className="py-3 text-sm text-gray-400 hover:text-gray-500">
-                  <span className="font-medium text-gray-900">Price</span>
-                </AccordionTrigger>
+        <PriceFilter />
+        <RatingFilter />
+      </Accordion>
+    </div>
+  );
+};
 
-                <AccordionContent className="pt-6 animate-none">
-                  <ul className="space-y-4">
-                    {PRICE_OPTIONS.map((option, optionIdx) => (
-                      <li key={option.value} className="flex items-center">
-                        <Checkbox
-                     
-                          id={`price-${optionIdx}`}
-                          onCheckedChange={() => {
-                            applyArrayFilter({
-                              type: "price",
-                              value: option.value,
-                            });
-                          }}
-                          checked={filter.price.includes(option.value)}
-                        />
-                        <label
-                          htmlFor={`price-${optionIdx}`}
-                          className="ml-3 text-sm text-gray-600 cursor-pointer"
-                        >
-                          {option.label}
-                        </label>
-                      </li>
-                    ))}
-                  </ul>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          </div>
-  )
-}
-
-export default FilterCourse
+export default FilterCourse;

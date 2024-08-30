@@ -56,7 +56,7 @@ const CourseCard: React.FC<CourseCardProps> = async ({ course }) => {
 
         {hasEnrolled ? (
           <Link
-            href=""
+            href={`/courses/${course?.id}/lesson`}
             className="text-xs text-sky-700 h-7 gap-1 flex items-center px-2 py-1 border border-sky-700 rounded-md"
           >
             Continue Learning

@@ -39,8 +39,8 @@ const Testimonials: React.FC<TestimonialsProps> = ({ testimonials }) => {
                     <blockquote className="rounded-lg bg-gray-50 p-6  sm:p-8 shadow-sm">
                       <div className="flex items-center gap-4">
                         <Image
-                          alt=""
-                          src="https://i.pravatar.cc/56"
+                          alt={testimonial?.user?.firstName}
+                          src={testimonial?.user?.profilePicture}
                           width="56"
                           height="56"
                           className="size-14 rounded-full object-cover"

@@ -8,6 +8,7 @@ import Testimonials from "./_components/Testimonials";
 
 const SingleCoursePage = async ({ params: { id } }: any) => {
   const course = (await getCourseDetails(id)) as ICourse;
+
   const testimonials = replaceMongoIdInArray(
     course?.testimonials
   ) as ITestimonial[];
@@ -20,7 +21,7 @@ const SingleCoursePage = async ({ params: { id } }: any) => {
 
       {course?.testimonials && <Testimonials testimonials={testimonials} />}
 
-      {/* <RelatedCourses /> */}
+      <RelatedCourses tags={course?.tags} />
     </>
   );
 };

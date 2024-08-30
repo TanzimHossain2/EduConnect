@@ -12,7 +12,10 @@ interface Props {
 }
 
 const CourseModuleList: React.FC<Props> = ({ module }) => {
-  const totalDuration = module?.lessonIds.reduce( (acc, lesson) => acc + lesson.duration, 0);
+  const totalDuration = module?.lessonIds.reduce(
+    (acc, lesson) => acc + lesson.duration,
+    0
+  );
 
   return (
     <>
@@ -31,8 +34,11 @@ const CourseModuleList: React.FC<Props> = ({ module }) => {
           <div className="space-y-3">
             {module?.lessonIds &&
               module?.lessonIds.length > 0 &&
-              module?.lessonIds.map((lessonId, index) => (
-                <CourseLessonList key={index} lessonId={lessonId.toString()} />
+              module?.lessonIds.map((lesson, index) => (
+                <CourseLessonList
+                  key={`${lesson.id}-${index}`}
+                  lesson={lesson}
+                />
               ))}
           </div>
         </AccordionContent>

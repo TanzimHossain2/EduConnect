@@ -1,13 +1,29 @@
+import { getFilterCourseList } from "@/backend/services/courses";
+import CourseCard from "./_components/CourseCard";
+import FilterCourse from "./_components/FilterCourse";
+import FilterCourseMobile from "./_components/FilterCourseMobile";
 import SearchPage from "./_components/SearchPage";
 import SortCourse from "./_components/SortCourse";
-import FilterCourseMobile from "./_components/FilterCourseMobile";
-import ActiveFilters from "./_components/ActiveFilters";
-import FilterCourse from "./_components/FilterCourse";
-import { getCourseList } from "@/backend/services/courses";
-import CourseCard from "./_components/CourseCard";
 
-const CoursesPage = async () => {
-  const courses = await getCourseList();
+const CoursesPage = async ({ searchParams }: any) => {
+  const search = searchParams?.search || "";
+  const category = searchParams?.category || "";
+  const price = searchParams?.price || "";
+  const sort = searchParams?.sort || "";
+  const maxPrice = searchParams?.maxPrice || "";
+  const minPrice = searchParams?.minPrice || "";
+  const rating = searchParams?.rating || "";
+ 
+
+  const courses = await getFilterCourseList(
+    search,
+    category,
+    price,
+    sort,
+    maxPrice,
+    minPrice
+  );
+
   return (
     <section
       id="courses"
@@ -15,32 +31,22 @@ const CoursesPage = async () => {
     >
       <div className="flex items-baseline justify-between  border-gray-200 border-b pb-6 flex-col gap-4 lg:flex-row">
         <SearchPage />
-
         <div className="flex items-center justify-end gap-2 max-lg:w-full">
           <SortCourse />
           <FilterCourseMobile />
         </div>
       </div>
 
-      <ActiveFilters
-      
-        filter={{
-          categories: ["development"],
-          price: ["free"],
-          sort: "",
-        }}
-      />
-
       <section className="pb-24 pt-6">
         <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
           <FilterCourse />
 
           <div className="lg:col-span-3 grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">
-            {
-             courses && courses.length > 0 &&
-            courses.map((course) => {
-              return <CourseCard course={course} key={course.id} />;
-            })}
+            {courses &&
+              courses.length > 0 &&
+              courses.map((course) => {
+                return <CourseCard course={course} key={course.id} />;
+              })}
           </div>
         </div>
       </section>
