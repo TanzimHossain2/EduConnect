@@ -73,7 +73,7 @@ const AddLive = () => {
 
   const { isSubmitting, isValid } = form.formState;
 
-  const onSubmit = async (values) => {
+  const onSubmit = async (values:any) => {
     try {
       router.push(`/dashboard/lives`);
       toast.success("Live created");
@@ -153,7 +153,7 @@ const AddLive = () => {
                       <PopoverContent className="w-auto p-0" align="start">
                         <Calendar
                           mode="single"
-                          selected={field.value}
+                          selected={field.value ? new Date(field.value) : undefined}
                           onSelect={field.onChange}
                           disabled={(date) => date < new Date()}
                         />
@@ -189,7 +189,7 @@ const AddLive = () => {
               {/* video url */}
               <FormField
                 control={form.control}
-                name="url"
+                name="description"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Video URL</FormLabel>
@@ -208,7 +208,7 @@ const AddLive = () => {
               />
               <FormField
                 control={form.control}
-                name="quizSet"
+                name="title"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Quiz Set</FormLabel>

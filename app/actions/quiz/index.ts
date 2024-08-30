@@ -1,8 +1,11 @@
 "use server";
 
 import { db } from "@/backend/model";
-import { createQuiz } from "@/backend/services/quiz";
+import { createAssessmentReport } from "@/backend/services/courses";
+import { createQuiz, getQuizSetById } from "@/backend/services/quiz";
+import { getLoggedInUser } from "@/lib/loggedin-user";
 import { getSlug } from "@/utils/slug";
+import mongoose from "mongoose";
 import * as z from "zod";
 
 // Define the schema for quizData using Zod
@@ -114,19 +117,17 @@ export const addQuizToQuizSet = async (quizSetId: string, quizData: any) => {
       code: 200,
       message: "Quiz added to quiz set",
     };
-
   } catch (err) {
     console.error("Error adding quiz to quiz set", err);
     return {
       code: 500,
-      error: err instanceof Error ? err.message : "Error adding quiz to quiz set",
+      error:
+        err instanceof Error ? err.message : "Error adding quiz to quiz set",
     };
   }
 };
 
-
 export const updateQuizInQuizSet = async (quizId: string, quizData: any) => {
-
   const parsedQuizData = quizDataSchema.safeParse(quizData);
 
   if (!parsedQuizData.success) {
@@ -183,13 +184,12 @@ export const updateQuizInQuizSet = async (quizId: string, quizData: any) => {
       error: "Error updating quiz",
     };
   }
+};
 
-
-
-}
-
-export const deleteQuizFromQuizSet = async (quizSetId: string, quizId: string) => {
-
+export const deleteQuizFromQuizSet = async (
+  quizSetId: string,
+  quizId: string
+) => {
   try {
     const quizSet = await db.quizSet.findById(quizSetId);
 
@@ -200,7 +200,7 @@ export const deleteQuizFromQuizSet = async (quizSetId: string, quizId: string) =
       };
     }
 
-  // Remove the quiz from the quiz set array
+    // Remove the quiz from the quiz set array
     quizSet.quizIds.pull(quizId);
     await quizSet.save();
 
@@ -208,7 +208,6 @@ export const deleteQuizFromQuizSet = async (quizSetId: string, quizId: string) =
       code: 200,
       message: "Quiz deleted from quiz set",
     };
-
   } catch (err) {
     console.error("Error deleting quiz from quiz set", err);
     return {
@@ -216,8 +215,7 @@ export const deleteQuizFromQuizSet = async (quizSetId: string, quizId: string) =
       error: "Error deleting quiz from quiz set",
     };
   }
-
-}
+};
 
 export const changeQuizSetPublishState = async (quizSetId: string) => {
   try {
@@ -244,12 +242,10 @@ export const changeQuizSetPublishState = async (quizSetId: string) => {
       error: "Error changing quiz set publish state",
     };
   }
-}
+};
 
 export const deleteQuizSet = async (quizSetId: string) => {
-
   try {
-
     // find quizSet by id
     const quizSet = await db.quizSet.findById(quizSetId);
 
@@ -258,13 +254,12 @@ export const deleteQuizSet = async (quizSetId: string) => {
         code: 404,
         error: "Quiz set not found",
       };
-    };
+    }
 
     // delete quizIds from quizSet
     if (quizSet.quizIds.length > 0) {
       await db.quiz.deleteMany({ _id: { $in: quizSet.quizIds } });
     }
-    
 
     // check if quizSet linked to any course
     const course = await db.course.findOne({ quizSet: quizSetId });
@@ -280,7 +275,6 @@ export const deleteQuizSet = async (quizSetId: string) => {
       code: 200,
       message: "Quiz set deleted",
     };
-
   } catch (err) {
     console.error("Error deleting quiz set", err);
     return {
@@ -288,11 +282,9 @@ export const deleteQuizSet = async (quizSetId: string) => {
       error: err instanceof Error ? err.message : "Error deleting quiz set",
     };
   }
+};
 
-}
-
-
-export const createQuizSet = async (data:any) => {
+export const createQuizSet = async (data: any) => {
   try {
     const slug = getSlug(data?.title);
     data["slug"] = slug;
@@ -302,9 +294,6 @@ export const createQuizSet = async (data:any) => {
       code: 200,
       quizSetId: quizSet._id.toString(),
     };
-
-
-
   } catch (err) {
     console.error("Error creating quiz set", err);
     return {
@@ -312,4 +301,81 @@ export const createQuizSet = async (data:any) => {
       error: err instanceof Error ? err.message : "Error creating quiz set",
     };
   }
-}
+};
+
+export const addQuizAssessment = async (
+  courseId: string,
+  quizSetId: string,
+  answers: any
+) => {
+  try {
+    const loggedInUser = await getLoggedInUser();
+
+    if (!loggedInUser) {
+      return {
+        code: 401,
+        error: "Unauthorized",
+      };
+    }
+
+    const quizSet = await getQuizSetById(quizSetId);
+
+    if (!quizSet) {
+      return {
+        code: 404,
+        error: "Quiz set not found",
+      };
+    }
+
+    const quizzes = quizSet.quizIds;
+
+    const assessmentRecord = quizzes.map((quiz) => {
+      const obj: any = {};
+      obj.quizId = new mongoose.Types.ObjectId(quiz.id);
+      const found = answers.find((a: any) => a.quizId === quiz.id);
+      if (found) {
+        obj.attmpted = true;
+      } else {
+        obj.attmpted = false;
+      }
+
+      const mergedOptions = quiz.options.map((o) => {
+        return {
+          option: o.text,
+          isCorrect: o.is_correct,
+          isSelected: (function () {
+            const found = answers.find(
+              (a: any) => a.options[0].option === o.text
+            );
+            if (found) {
+              return true;
+            } else {
+              return false;
+            }
+          })(),
+        };
+      });
+      obj["options"] = mergedOptions;
+      return obj;
+    });
+
+    const assessmentEntry: any = {};
+    assessmentEntry.assessments = assessmentRecord;
+    assessmentEntry.otherMarks = 0;
+
+    const assessment = await db.assessment.create(assessmentEntry);
+
+    await createAssessmentReport({
+      courseId: courseId,
+      userId: loggedInUser?.id,
+      quizAssessment: assessment?._id,
+    });
+  } catch (err) {
+    console.error("Error adding quiz assessment", err);
+    return {
+      code: 500,
+      error:
+        err instanceof Error ? err.message : "Error adding quiz assessment",
+    };
+  }
+};

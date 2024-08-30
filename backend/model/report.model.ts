@@ -17,6 +17,16 @@ const reportSchema = new Schema<IReport>({
   student: { type: Schema.ObjectId, ref: "User" },
 
   quizAssessment: { type: Schema.ObjectId, ref: "Assessment" },
+  completion_date: {
+    type: Date,
+    required: false,
+   
+  },
+  courseCompletion: {
+    type: Boolean,
+    required: false,
+  }
+
 });
 
 

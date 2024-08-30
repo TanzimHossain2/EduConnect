@@ -1,7 +1,9 @@
+import { dbConnect } from "@/backend/db/connectDb";
 import { db } from "@/backend/model";
 import { nestedReplaceMongoIdInObject, replaceMongoIdInArray } from "@/utils/convertData";
 
 export async function getCategories() {
+ await dbConnect ();
   try {
     const categories = await db.category.find({}).lean();
 

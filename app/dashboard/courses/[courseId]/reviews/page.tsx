@@ -1,12 +1,12 @@
 import { getCourseDetails } from "@/backend/services/courses";
 import { columns } from "./_components/columns";
 import { DataTable } from "./_components/data-table";
-import { useInstructorData, REVIEW_DATA } from "@/hooks/use-Instractor";
 import { ITestimonial } from "@/interface/courses";
+import { getInstructorData, REVIEW_DATA } from "@/lib/instructorData";
 
 const ReviewsPage = async ({params: {courseId}}: {params: {courseId: string}}) => {
   const  course = await getCourseDetails(courseId);
-  const reviews = await useInstructorData(REVIEW_DATA) as ITestimonial[];
+  const reviews = await getInstructorData(REVIEW_DATA) as ITestimonial[];
 
   const reviewDataForCourse = reviews.filter((review) => review.courseId.toString() === courseId);
 

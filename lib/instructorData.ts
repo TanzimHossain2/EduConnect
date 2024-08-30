@@ -16,7 +16,7 @@ type IDataType =
   | typeof REVIEW_DATA
   | typeof DEFAULT_DATA;
 
-export const useInstructorData = async (dataType: IDataType = DEFAULT_DATA) => {
+export const getInstructorData = async (dataType: IDataType = DEFAULT_DATA) => {
   try {
     const session = await auth();
 

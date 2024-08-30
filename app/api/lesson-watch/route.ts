@@ -1,6 +1,9 @@
 import { db } from "@/backend/model";
-import { createWatchReport, getLesson, getModuleBySlug } from "@/backend/services/courses";
-import { State } from "@/interface/courses";
+import {
+  createWatchReport,
+  getLesson,
+  getModuleBySlug,
+} from "@/backend/services/courses";
 import { getLoggedInUser } from "@/lib/loggedin-user";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -8,15 +11,17 @@ import { NextRequest, NextResponse } from "next/server";
 const STARTED = "started";
 const COMPLETED = "completed";
 
-const updateReport = async (userId: string, courseId: string, moduleId: string, lessonId: string) => {
-    try {
-        // Call for creating/updating report
-        createWatchReport({ userId, courseId, moduleId, lessonId });
-    } catch (err) {
-        
-    }
-}
-
+const updateReport = async (
+  userId: string,
+  courseId: string,
+  moduleId: string,
+  lessonId: string
+) => {
+  try {
+    // Call for creating/updating report
+    createWatchReport({ userId, courseId, moduleId, lessonId });
+  } catch (err) {}
+};
 
 export const POST = async (req: NextRequest) => {
   try {
@@ -53,50 +58,42 @@ export const POST = async (req: NextRequest) => {
       state,
     };
 
+    const found = await db.watch
+      .findOne({
+        lesson: lessonId,
+        module: moduleData.id,
+        user: loggedInUser.id,
+      })
+      .lean();
 
-      const found = await db.watch
-        .findOne({
-          lesson: lessonId,
-          module: moduleData.id,
-          user: loggedInUser.id,
-        })
-        .lean();
-
-    //   if (state === STARTED) {
-    //     if (!found) {
-    //       await db.watch.create(watchEntry);
-    //     }
-    //   } else if (state === COMPLETED) {
-    //     if (!found) {
-    //       await db.watch.create(watchEntry);
-    //     } else {
-    //       if (found.state === (STARTED as State)) {
-    //         await db.watch.findByIdAndUpdate(found._id, { state: COMPLETED, lastTime });
-    //       }
-    //     }
-    //   }
-
-
-    if (!found) {
+    if (state === STARTED) {
+      if (!found) {
+        // If the lesson is started and there's no previous record, create a new one
+        await db.watch.create(watchEntry);
+      }
+      found && (await db.watch.findByIdAndUpdate(found._id, { lastTime }));
+    } else if (state === COMPLETED) {
+      if (!found) {
+        // If the lesson is completed and there's no previous record, create it as completed
         await db.watch.create(watchEntry);
         await updateReport(loggedInUser.id, courseId, moduleData.id, lessonId);
       } else {
-        // Always update the lastTime, even if the record already exists
-        const updateData:any = { lastTime };
-  
-        // If the state is COMPLETED and the existing state is STARTED, update the state as well
-        if (state === COMPLETED && found.state === STARTED) {
-          updateData['state'] = COMPLETED;
+        // If the lesson is found and was previously started, update it to completed
+        if (found.state === STARTED) {
+          await db.watch.findByIdAndUpdate(found._id, {
+            state: COMPLETED,
+            lastTime,
+          });
         }
-  
-        await db.watch.findByIdAndUpdate(found._id, updateData);
         await updateReport(loggedInUser.id, courseId, moduleData.id, lessonId);
       }
 
-      return new NextResponse(`Watch Record Updated successfully`, {
-        status: 200,
-      });
-    
+      found && (await db.watch.findByIdAndUpdate(found._id, { lastTime }));
+    }
+
+    return new NextResponse(`Watch Record Updated successfully`, {
+      status: 200,
+    });
   } catch (err) {
     return new NextResponse(
       `${err instanceof Error ? err.message : "An error occurred"}`,

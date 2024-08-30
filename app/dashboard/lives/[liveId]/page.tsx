@@ -62,7 +62,7 @@ const EditLive = () => {
 
   const { isSubmitting, isValid } = form.formState;
 
-  const onSubmit = async (values) => {
+  const onSubmit = async (values:any) => {
     try {
       router.push(`/dashboard/lives`);
       toast.success("Live created");
@@ -126,7 +126,7 @@ const EditLive = () => {
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
                         mode="single"
-                        selected={field.value}
+                        selected={field.value ? new Date(field.value) : undefined}
                         onSelect={field.onChange}
                         disabled={(date) => date < new Date()}
                       />

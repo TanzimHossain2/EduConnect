@@ -9,13 +9,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import { Column, Row } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal, Pencil } from "lucide-react";
 import Link from "next/link";
+
+
 
 export const columns = [
   {
     accessorKey: "title",
-    header: ({ column }) => {
+    header: ({ column }:{column: Column<any>}) => {
       return (
         <Button
           variant="ghost"
@@ -28,7 +31,7 @@ export const columns = [
   },
   {
     accessorKey: "date",
-    header: ({ column }) => {
+    header: ({ column }: { column: Column<any> }) => {
       return (
         <Button
           variant="ghost"
@@ -41,7 +44,7 @@ export const columns = [
   },
   {
     accessorKey: "time",
-    header: ({ column }) => {
+    header: ({ column }: { column: Column<any> }) => {
       return (
         <Button
           variant="ghost"
@@ -54,7 +57,7 @@ export const columns = [
   },
   {
     id: "actions",
-    cell: ({ row }) => {
+    cell: ({ row }: { row: Row<any> }) => {
       const { id } = row.original;
       return (
         <DropdownMenu>

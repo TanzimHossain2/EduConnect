@@ -32,7 +32,7 @@ const CourseModuleList: React.FC<Props> = ({ module }) => {
             {module?.lessonIds &&
               module?.lessonIds.length > 0 &&
               module?.lessonIds.map((lessonId, index) => (
-                <CourseLessonList key={index} lessonId={lessonId} />
+                <CourseLessonList key={index} lessonId={lessonId.toString()} />
               ))}
           </div>
         </AccordionContent>

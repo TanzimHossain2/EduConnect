@@ -6,7 +6,7 @@ import "react-quill/dist/quill.snow.css";
 
 
 
-export const Editor = ({ onChange, value }) => {
+export const Editor = ({ onChange, value }: { onChange: any, value: any }) => {
   const ReactQuill = useMemo(
     () => dynamic(() => import("react-quill"), { ssr: false }),
     []

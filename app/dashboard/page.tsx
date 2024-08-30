@@ -29,7 +29,7 @@ const DashboardPage = async () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {courseStats?.courses}
+              {String(courseStats?.courses)}
             </div>
           </CardContent> 
         </Card>
@@ -42,7 +42,7 @@ const DashboardPage = async () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {courseStats?.enrollments}
+              {courseStats?.enrollments.toString()}
             </div>
           </CardContent>
         </Card>
@@ -52,7 +52,7 @@ const DashboardPage = async () => {
             <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{formatPrice(courseStats?.revenue)}</div>
+            <div className="text-2xl font-bold">{formatPrice(courseStats?.revenue ?? 0)}</div>
           </CardContent>
         </Card>
 

@@ -90,7 +90,7 @@ export interface IEnrollment {
   quizMark?: number;
 }
 
-export interface ILesson {
+export interface ILesson extends Document {
   id: string;
   title: string;
   description: string;
@@ -114,6 +114,8 @@ export interface IReport {
   totalCompletedLessons: ObjectId[];
   totalCompletedModules: ObjectId[];
   quizAssessment: IAssessment;
+  completion_date: Date;
+  courseCompletion: boolean;
 }
 
 export interface IAssessments {
@@ -145,6 +147,9 @@ export interface IQuiz extends Document {
   options: {
     text: string;
     is_correct: boolean;
+    label?: string;
+    isCorrect?: boolean;
+    id?: string;
   }[];
 }
 

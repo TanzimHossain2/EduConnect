@@ -85,7 +85,7 @@ export const getCourseDetails = async (id: string) => {
         path: "lessonIds",
         model: db.lesson,
       }
-      
+
     })
     .lean();
 
@@ -101,10 +101,8 @@ export const getCourseDetails = async (id: string) => {
   
 };
 
-
 export const getCourseModulesDetails = async (id: string) => {
   try {
-
     const course = await db.course
       .findById(id)
       .populate({
@@ -114,13 +112,18 @@ export const getCourseModulesDetails = async (id: string) => {
           path : "lessonIds",
           model : db.lesson
         }
-      }).lean();
+      })
+      .populate({
+        path: "quizSet",
+        model: db.quizSet,
+        populate: {
+          path: "quizIds",
+          model: db.quiz
+        }
+      })
+      .lean(); 
 
     return nestedReplaceMongoIdInObject( course as NonNullable<typeof course>) as ICourse;
-
-
-
-    
   } catch (err) {
      
     console.error("Error fetching course modules details: ", err);

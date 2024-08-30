@@ -1,3 +1,4 @@
+import { createCertificate } from "./certificatePdf";
 import { fileUpload } from "./fileUpload";
 
-export { fileUpload };
+export { fileUpload, createCertificate };

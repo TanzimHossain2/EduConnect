@@ -4,7 +4,13 @@ import { usePathname, useRouter } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 
-export const SidebarItem = ({ icon: Icon, label, href }) => {
+interface SidebarItemProps {
+  icon: any;
+  label: string;
+  href: string;
+}
+
+export const SidebarItem = ({ icon: Icon, label, href }:SidebarItemProps) => {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -25,10 +31,7 @@ export const SidebarItem = ({ icon: Icon, label, href }) => {
       )}
     >
       <div className="flex items-center gap-x-2 py-4">
-        <Icon
-          size={22}
-          className={cn("text-slate-500", isActive && "text-emerald-600")}
-        />
+        <Icon size={22} />
         {label}
       </div>
       <div

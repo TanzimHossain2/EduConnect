@@ -9,7 +9,7 @@ import { create } from "./createCourse";
 import { getEnrollmentsForCourse, getEnrollmentsForUser, hasEnrollmentForCourse } from "./enrollments";
 import { createLesson, getLesson, getLessonBySlug } from "./lessons";
 import { createModule, getModuleById, getModuleBySlug } from "./modules";
-import { createWatchReport, getAReport } from "./reports";
+import { createAssessmentReport, createWatchReport, getAReport } from "./reports";
 import { getTestimonialsForCourse } from "./testimonials";
 
 export {
@@ -33,4 +33,5 @@ export {
   getCourseModulesDetails,
   getModuleBySlug,
   createWatchReport,
+  createAssessmentReport,
 };

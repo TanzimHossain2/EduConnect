@@ -27,6 +27,8 @@ diagrams folder contains the diagram of the project in the form of a .drawio fil
 - [x] Lesson CRUD
 - [x] lesson page
 - [x] Video player for lesson
+- [x] Drag and drop for lesson
+- [x] Quiz CRUD
 
 ## Tech Stack
 

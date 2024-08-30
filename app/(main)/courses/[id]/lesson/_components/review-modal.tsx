@@ -29,7 +29,7 @@ const formSchema = z.object({
     message: "Description is required!",
   }),
 });
-export const ReviewModal = ({ open, setOpen }) => {
+export const ReviewModal = ({ open, setOpen }: { open: boolean, setOpen: React.Dispatch<React.SetStateAction<boolean>> }) => {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -40,7 +40,7 @@ export const ReviewModal = ({ open, setOpen }) => {
 
   const { isSubmitting, isValid } = form.formState;
 
-  const onSubmit = async (values) => {
+  const onSubmit = async (values: any) => {
     try {
       toast.success("Review added");
       setOpen(false);
